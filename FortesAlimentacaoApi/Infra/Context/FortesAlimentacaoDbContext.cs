@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FortesAlimentacaoApi.Database.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Infra.Context;
 
@@ -17,4 +18,14 @@ public class FortesAlimentacaoDbContext : DbContext
         var connectionString = _configuration.GetConnectionString("FortesAlimentacaoConnection");
         optionsBuilder.UseNpgsql(connectionString);
     }
+
+    public DbSet<Encarregado> Encarregados { get; set; }
+    public DbSet<Admin> Admins { get; set; }
+    public DbSet<Operario> Operarios { get; set; }
+    public DbSet<Endereco> Enderecos { get; set; }
+    public DbSet<Obra> Obras { get; set; }
+    public DbSet<GestaoEquipe> GestaoEquipes { get; set; }
+    public DbSet<Equipe> Equipes { get; set; }
+    public DbSet<ControleData> ControleDatas { get; set; }
+    public DbSet<Refeicao> Refeicoes { get; set; }
 }
