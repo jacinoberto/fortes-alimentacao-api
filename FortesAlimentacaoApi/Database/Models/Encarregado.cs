@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FortesAlimentacaoApi.Database.Model;
+namespace FortesAlimentacaoApi.Database.Models;
 
-[Table("tb_admins")]
-public class Admin
+[Table("tb_encarregados")]
+public class Encarregado
 {
     [Key]
     [Column("id_admin")]
@@ -13,6 +13,6 @@ public class Admin
 
     public required Gestor Gestor { get; set; }
 
-    [Column("status")]
-    public required bool Status { get; set; }
+    // Relacionamento
+    public ICollection<GestaoEquipe> GestaoEquipes { get; set; }
 }

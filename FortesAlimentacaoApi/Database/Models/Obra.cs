@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FortesAlimentacaoApi.Database.Model;
+namespace FortesAlimentacaoApi.Database.Models;
 
 [Table("tb_obras")]
 public class Obra

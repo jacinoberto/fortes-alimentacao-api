@@ -12,6 +12,9 @@ builder.Services.AddSwaggerGen();
 // Add context
 builder.Services.AddDbContext<FortesAlimentacaoDbContext>();
 
+// Add mapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

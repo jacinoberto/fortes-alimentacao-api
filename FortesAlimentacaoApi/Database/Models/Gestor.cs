@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FortesAlimentacaoApi.Database.Model;
+namespace FortesAlimentacaoApi.Database.Models;
 
 [ComplexType]
+[Index("Matricula", IsUnique = true)]
 public class Gestor
 {
     [Column("nome")]

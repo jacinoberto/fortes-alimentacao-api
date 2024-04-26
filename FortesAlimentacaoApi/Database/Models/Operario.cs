@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FortesAlimentacaoApi.Database.Model;
+namespace FortesAlimentacaoApi.Database.Models;
 
 [Table("tb_operarios")]
 public class Operario
