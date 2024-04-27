@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FortesAlimentacaoApi.Database.Models;
@@ -17,6 +16,9 @@ public class Operario
 
     [Column("matricula")]
     public required string Matricula { get; set; }
+
+    [Column("status")]
+    public required bool Status { get; set; } = true;
 
     // Relacionamento
     public ICollection<Equipe> Equipes { get; set; }

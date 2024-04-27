@@ -1,5 +1,5 @@
 using FortesAlimentacaoApi.Infra.Context;
-using FortesAlimentacaoApi.Services.AdminService;
+using FortesAlimentacaoApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +18,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Add service
 builder.Services.AddScoped<AdminService>();
+builder.Services.AddScoped<OperarioService>();
 
 var app = builder.Build();
 

@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using FortesAlimentacaoApi.Database.Dtos.Operario;
-using FortesAlimentacaoApi.Database.Models;
-using FortesAlimentacaoApi.Infra.Context;
+﻿using FortesAlimentacaoApi.Database.Dtos.Operario;
+using FortesAlimentacaoApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FortesAlimentacaoApi.Controllers;
@@ -10,21 +8,39 @@ namespace FortesAlimentacaoApi.Controllers;
 [Route("[controller]")]
 public class OperarioController : ControllerBase
 {
-    private FortesAlimentacaoDbContext _context;
-    private IMapper _mapper;
+    private OperarioService _service;
 
-    public OperarioController(FortesAlimentacaoDbContext context, IMapper mapper)
+    public OperarioController(OperarioService service)
     {
-        _context = context;
-        _mapper = mapper;
+        _service = service;
     }
 
     [HttpPost]
     public IActionResult Inserir([FromBody] InserirOperario operarioDto)
     {
-        Operario operario = _mapper.Map<Operario>(operarioDto);
-        _context.Add(operario);
-        _context.SaveChanges();
-        return Ok(operarioDto);
+        return Ok(_service.Inserir(operarioDto));
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult RetornarPorId(Guid id)
+    {
+        if (_service.RetornarPorId(id) is null) return NotFound();
+
+        return Ok(_service.RetornarPorId(id));
+    }
+
+    [HttpGet]
+    public IActionResult RetornarTodos()
+    {
+        return Ok(_service.RetornarTodos());
+    }
+
+    [HttpDelete]
+    public IActionResult Delete(Guid id)
+    {
+        if(!_service.Deletar(id)) return NotFound();
+        
+        _service.Deletar(id);
+        return NoContent();
     }
 }

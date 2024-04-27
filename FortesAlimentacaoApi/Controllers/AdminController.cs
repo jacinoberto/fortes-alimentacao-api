@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using FortesAlimentacaoApi.Database.Dtos.Admin;
-using FortesAlimentacaoApi.Database.Models;
-using FortesAlimentacaoApi.Infra.Context;
-using FortesAlimentacaoApi.Services.AdminService;
+﻿using FortesAlimentacaoApi.Database.Dtos.Admin;
+using FortesAlimentacaoApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FortesAlimentacaoApi.Controllers;
@@ -21,18 +18,29 @@ public class AdminController : ControllerBase
     [HttpPost]
     public IActionResult Insert([FromBody] InserirAdmin adminDto)
     {
-        return Ok(_service.Insert(adminDto));
+        return Ok(_service.Inserir(adminDto));
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(_service.GetAll());
+        return Ok(_service.RetornarTodos());
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(Guid id) 
     {
-        return Ok(_service.GeteById(id));
+        if (_service.RetornarPorId(id) is null) return NotFound();
+
+        return Ok(_service.RetornarPorId(id));
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(Guid id) 
+    {
+        if (!_service.Deletar(id)) return NotFound();
+
+        _service.Deletar(id);
+        return NoContent();
     }
 }

@@ -7,9 +7,9 @@ public interface IServiceGlobal<TInserir, TLeitura, TAtualizar>
     where TLeitura : class
     where TAtualizar : class
 {
-    public TLeitura GeteById(Guid id);
-    public Collection<TLeitura> GetAll();
-    public TLeitura Insert(TInserir entity);
-    public void Update(Guid id, TAtualizar entity);
-    public void Delete(Guid id);
+    public TLeitura RetornarPorId(Guid id);
+    public IEnumerable<TLeitura> RetornarTodos();
+    public TLeitura Inserir(TInserir entity);
+    public void Atualizar(Guid id, TAtualizar entity);
+    public bool Deletar(Guid id);
 }
