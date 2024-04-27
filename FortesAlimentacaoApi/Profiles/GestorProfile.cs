@@ -9,5 +9,6 @@ public class GestorProfile : Profile
     public GestorProfile()
     {
         CreateMap<InserirGestor, Gestor>();
+        CreateMap<Gestor, RetornarGestor>();
     }
 }

@@ -2,6 +2,7 @@
 using FortesAlimentacaoApi.Database.Dtos.Admin;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
+using FortesAlimentacaoApi.Services.AdminService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FortesAlimentacaoApi.Controllers;
@@ -10,21 +11,28 @@ namespace FortesAlimentacaoApi.Controllers;
 [Route("[controller]")]
 public class AdminController : ControllerBase
 {
-    private FortesAlimentacaoDbContext _context;
-    private IMapper _mapper;
+    private AdminService _service;
 
-    public AdminController(FortesAlimentacaoDbContext context, IMapper mapper)
+    public AdminController(AdminService service)
     {
-        _context = context;
-        _mapper = mapper;
+        _service = service;
     }
 
     [HttpPost]
     public IActionResult Insert([FromBody] InserirAdmin adminDto)
     {
-        Admin admin = _mapper.Map<Admin>(adminDto);
-        _context.Add(admin);
-        _context.SaveChanges();
-        return Ok(adminDto);
+        return Ok(_service.Insert(adminDto));
+    }
+
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        return Ok(_service.GetAll());
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult GetById(Guid id) 
+    {
+        return Ok(_service.GeteById(id));
     }
 }
