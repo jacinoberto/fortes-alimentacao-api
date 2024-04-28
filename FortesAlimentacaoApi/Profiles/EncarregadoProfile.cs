@@ -12,5 +12,15 @@ public class EncarregadoProfile : Profile
             .ForMember(encarregado => encarregado.Gestor,
             option => option.MapFrom(encarregadoDto => encarregadoDto.Gestor))
             .ReverseMap();
+
+        CreateMap<Encarregado, RetornarEncarregado>()
+            .ForMember(encarregadoDto => encarregadoDto.Gestor,
+            option => option.MapFrom(encarregado => encarregado.Gestor))
+            .ReverseMap();
+
+        CreateMap<Encarregado, RetornoEncarregadoGestao>()
+            .ForMember(encarregadoDto => encarregadoDto.Gestor,
+            option => option.MapFrom(encarregado => encarregado.Gestor))
+            .ReverseMap();
     }
 }

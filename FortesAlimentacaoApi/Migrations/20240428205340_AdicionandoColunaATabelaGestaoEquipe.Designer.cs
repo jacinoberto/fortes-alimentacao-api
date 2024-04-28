@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FortesAlimentacaoApi.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FortesAlimentacaoApi.Migrations
 {
     [DbContext(typeof(FortesAlimentacaoDbContext))]
-    partial class FortesAlimentacaoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240428205340_AdicionandoColunaATabelaGestaoEquipe")]
+    partial class AdicionandoColunaATabelaGestaoEquipe
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,8 +78,8 @@ namespace FortesAlimentacaoApi.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("atipico");
 
-                    b.Property<DateOnly>("DataRefeicao")
-                        .HasColumnType("date")
+                    b.Property<DateTimeOffset>("DataRefeicao")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("data_refeicao");
 
                     b.Property<string>("Descricao")

@@ -12,7 +12,7 @@ public class ControleData
     public required Guid Id { get; set; }
 
     [Column("data_refeicao")]
-    public required DateTimeOffset DataRefeicao { get; set; }
+    public required DateOnly DataRefeicao { get; set; }
 
     [Column("descricao")]
     public string? Descricao { get; set; }

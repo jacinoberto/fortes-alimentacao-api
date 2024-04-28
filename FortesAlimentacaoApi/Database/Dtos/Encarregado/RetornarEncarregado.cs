@@ -2,6 +2,7 @@
 
 namespace FortesAlimentacaoApi.Database.Dtos.Encarregado;
 
-public record InserirEncarregado(
-    InserirGestor Gestor
+public record RetornarEncarregado(
+    Guid Id,
+    RetornarGestor Gestor
 );

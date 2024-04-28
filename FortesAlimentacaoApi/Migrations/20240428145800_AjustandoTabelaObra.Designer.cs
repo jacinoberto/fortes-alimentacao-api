@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FortesAlimentacaoApi.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FortesAlimentacaoApi.Migrations
 {
     [DbContext(typeof(FortesAlimentacaoDbContext))]
-    partial class FortesAlimentacaoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240428145800_AjustandoTabelaObra")]
+    partial class AjustandoTabelaObra
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,8 +78,8 @@ namespace FortesAlimentacaoApi.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("atipico");
 
-                    b.Property<DateOnly>("DataRefeicao")
-                        .HasColumnType("date")
+                    b.Property<DateTimeOffset>("DataRefeicao")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("data_refeicao");
 
                     b.Property<string>("Descricao")
@@ -218,10 +221,6 @@ namespace FortesAlimentacaoApi.Migrations
                         .HasColumnType("text")
                         .HasColumnName("setor");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("boolean")
-                        .HasColumnName("status");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EncarregadoId");
@@ -348,7 +347,7 @@ namespace FortesAlimentacaoApi.Migrations
 
             modelBuilder.Entity("FortesAlimentacaoApi.Database.Models.GestaoEquipe", b =>
                 {
-                    b.HasOne("FortesAlimentacaoApi.Database.Models.Encarregado", "Encarregado")
+                    b.HasOne("FortesAlimentacaoApi.Database.Models.Encarregado", "Encarregrado")
                         .WithMany("GestaoEquipes")
                         .HasForeignKey("EncarregadoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -360,7 +359,7 @@ namespace FortesAlimentacaoApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Encarregado");
+                    b.Navigation("Encarregrado");
 
                     b.Navigation("Obra");
                 });

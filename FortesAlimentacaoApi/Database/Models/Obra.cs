@@ -19,12 +19,12 @@ public class Obra
     public Guid EnderecoId { get; set; }
 
     [Column("data_inicial")]
-    public DateTimeOffset DataInicial { get; set; }
+    public DateOnly DataInicial { get; set; }
 
     [Column("data_final")]
-    public DateTimeOffset? DataFinal { get; set; }
+    public DateOnly? DataFinal { get; set; }
 
     // Relacionamentos
     public Endereco Endereco { get; set; }
-    public ICollection<GestaoEquipe> GestaoEquipes { get; set; }
+    public ICollection<GestaoEquipe>? GestaoEquipes { get; set; }
 }

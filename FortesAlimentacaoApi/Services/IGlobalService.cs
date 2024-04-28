@@ -2,7 +2,7 @@
 
 namespace FortesAlimentacaoApi.Services;
 
-public interface IServiceGlobal<TInserir, TLeitura, TAtualizar>
+public interface IGlobalService<TInserir, TLeitura, TAtualizar>
     where TInserir : class
     where TLeitura : class
     where TAtualizar : class

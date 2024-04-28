@@ -33,5 +33,11 @@ public class FortesAlimentacaoDbContext : DbContext
         modelBuilder.Entity<Operario>()
             .HasIndex(operario => operario.Matricula)
             .IsUnique();
+
+        modelBuilder.Entity<Obra>()
+            .HasOne(e => e.Endereco)
+            .WithMany(e => e.Obras)
+            .HasForeignKey(e => e.EnderecoId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

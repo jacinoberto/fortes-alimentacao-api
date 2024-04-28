@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FortesAlimentacaoApi.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FortesAlimentacaoApi.Migrations
 {
     [DbContext(typeof(FortesAlimentacaoDbContext))]
-    partial class FortesAlimentacaoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240428213722_AjustantoTableControleDatas")]
+    partial class AjustantoTableControleDatas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

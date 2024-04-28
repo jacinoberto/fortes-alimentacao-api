@@ -16,14 +16,23 @@ public class GestaoEquipe
     public required Guid ObraId { get; set; }
 
     [Column("encarregado_id")]
-    [ForeignKey(nameof(Encarregado))]
+    [ForeignKey(nameof(Models.Encarregado))]
     public required Guid EncarregadoId { get; set; }
 
     [Column("setor")]
     public required string Setor { get; set; }
 
+    [Column("status")]
+    public required bool Status { get; set; } = true;
+
     // Relacionamentos
     public Obra Obra { get; set; }
-    public Encarregado Encarregrado { get; set; }
+    public Encarregado Encarregado { get; set; }
     public ICollection<Equipe> Equipes { get; set; }
+
+    // Métodos
+    public void InativarGestaoEquipe()
+    {
+        Status = false;
+    }
 }

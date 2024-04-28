@@ -5,7 +5,7 @@ using FortesAlimentacaoApi.Database.Dtos.Operario;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
 
-public class OperarioService : IServiceGlobal<InserirOperario, RetornarOperario, AtualizarOperario>
+public class OperarioService : IGlobalService<InserirOperario, RetornarOperario, AtualizarOperario>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;

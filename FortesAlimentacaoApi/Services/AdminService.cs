@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace FortesAlimentacaoApi.Services;
 
-public class AdminService : IServiceGlobal<InserirAdmin, RetornoAdmin, AtualizarAdmin>
+public class AdminService : IGlobalService<InserirAdmin, RetornoAdmin, AtualizarAdmin>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
@@ -24,10 +24,8 @@ public class AdminService : IServiceGlobal<InserirAdmin, RetornoAdmin, Atualizar
 
     public RetornoAdmin RetornarPorId(Guid id)
     {
-        Admin admin = _context.Admins
-            .FirstOrDefault(admin => admin.Id == id);
-
-        return _mapper.Map<RetornoAdmin>(admin);
+        return _mapper.Map<RetornoAdmin>(_context.Admins
+            .FirstOrDefault(admin => admin.Id == id));
     }
 
     public RetornoAdmin Inserir(InserirAdmin entity)

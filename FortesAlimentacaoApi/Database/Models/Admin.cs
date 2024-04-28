@@ -12,7 +12,4 @@ public class Admin
     public required Guid Id { get; set; }
 
     public required Gestor Gestor { get; set; }
-
-    [Column("status")]
-    public required bool Status { get; set; }
 }

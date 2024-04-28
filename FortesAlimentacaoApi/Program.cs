@@ -19,6 +19,12 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Add service
 builder.Services.AddScoped<AdminService>();
 builder.Services.AddScoped<OperarioService>();
+builder.Services.AddScoped<EncarregadoService>();
+builder.Services.AddScoped<ObraService>();
+builder.Services.AddScoped<GestaoEquipeService>();
+builder.Services.AddScoped<EquipeService>();
+builder.Services.AddScoped<ControleDataService>();
+builder.Services.AddScoped<RefeicaoService>();
 
 var app = builder.Build();
 

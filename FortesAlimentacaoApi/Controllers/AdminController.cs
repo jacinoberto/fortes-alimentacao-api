@@ -1,4 +1,5 @@
 ﻿using FortesAlimentacaoApi.Database.Dtos.Admin;
+using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,10 @@ public class AdminController : ControllerBase
     [HttpPost]
     public IActionResult Insert([FromBody] InserirAdmin adminDto)
     {
-        return Ok(_service.Inserir(adminDto));
+        RetornoAdmin admin = _service.Inserir(adminDto);
+        return CreatedAtAction(nameof(GetById),
+            new {id = admin.Id},
+            admin);
     }
 
     [HttpGet]

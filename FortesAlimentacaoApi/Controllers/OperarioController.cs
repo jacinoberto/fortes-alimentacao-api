@@ -18,7 +18,10 @@ public class OperarioController : ControllerBase
     [HttpPost]
     public IActionResult Inserir([FromBody] InserirOperario operarioDto)
     {
-        return Ok(_service.Inserir(operarioDto));
+        RetornarOperario operario = _service.Inserir(operarioDto);
+        return CreatedAtAction(nameof(RetornarPorId),
+            new {id =  operario.Id},
+            operario);
     }
 
     [HttpGet("{id}")]

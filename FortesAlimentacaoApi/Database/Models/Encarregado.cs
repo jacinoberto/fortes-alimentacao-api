@@ -7,7 +7,7 @@ namespace FortesAlimentacaoApi.Database.Models;
 public class Encarregado
 {
     [Key]
-    [Column("id_admin")]
+    [Column("id_encarregado")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public required Guid Id { get; set; }
 
@@ -15,4 +15,10 @@ public class Encarregado
 
     // Relacionamento
     public ICollection<GestaoEquipe> GestaoEquipes { get; set; }
+
+    // Metodos
+    public void InativarPerfil()
+    {
+        Gestor.Status = false;
+    }
 }

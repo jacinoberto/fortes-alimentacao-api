@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace FortesAlimentacaoApi.Database.Models;
 
 [ComplexType]
-[Index("Matricula", IsUnique = true)]
 public class Gestor
 {
     [Column("nome")]
@@ -18,4 +17,7 @@ public class Gestor
 
     [Column("senha")]
     public required string Senha { get; set; }
+
+    [Column("status")]
+    public required bool Status { get; set; } = true;
 }
