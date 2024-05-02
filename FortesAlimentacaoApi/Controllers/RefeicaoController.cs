@@ -16,9 +16,9 @@ public class RefeicaoController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Inserir([FromBody] InserirRefeicao refeicaoDto)
+    public async Task<IActionResult> Inserir([FromBody] InserirRefeicao refeicaoDto)
     {
-        RetornarRefeicao refeicao = _service.Inserir(refeicaoDto);
+        RetornarRefeicao refeicao = await _service.Inserir(refeicaoDto);
 
         return CreatedAtAction(nameof(RetornarPorId),
             new { id = refeicao.Id },
@@ -26,14 +26,14 @@ public class RefeicaoController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult RetornarPorId(Guid id)
+    public async Task<IActionResult> RetornarPorId(Guid id)
     {
-        return Ok(_service.RetornarPorId(id));
+        return Ok(await _service.RetornarPorId(id));
     }
 
     [HttpGet]
-    public IActionResult RetornarTodos()
+    public async Task<IActionResult> RetornarTodos()
     {
-        return Ok(_service.RetornarTodos());
+        return Ok(await _service.RetornarTodos());
     }
 }

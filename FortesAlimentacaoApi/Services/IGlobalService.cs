@@ -2,14 +2,13 @@
 
 namespace FortesAlimentacaoApi.Services;
 
-public interface IGlobalService<TInserir, TLeitura, TAtualizar>
+public interface IGlobalService<TInserir, TLeitura>
     where TInserir : class
     where TLeitura : class
-    where TAtualizar : class
 {
-    public TLeitura RetornarPorId(Guid id);
-    public IEnumerable<TLeitura> RetornarTodos();
-    public TLeitura Inserir(TInserir entity);
-    public void Atualizar(Guid id, TAtualizar entity);
-    public bool Deletar(Guid id);
+    public Task<TLeitura> RetornarPorId(Guid id);
+    public Task<IEnumerable<TLeitura>> RetornarTodos();
+    public Task<TLeitura> Inserir(TInserir entity);
+    //public void Atualizar(Guid id, TAtualizar entity);
+    public Task<bool> Deletar(Guid id);
 }

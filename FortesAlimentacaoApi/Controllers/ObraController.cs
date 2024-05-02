@@ -17,24 +17,24 @@ public class ObraController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Inserir([FromBody] InserirObra obraDto)
+    public async Task<IActionResult> Inserir([FromBody] InserirObra obraDto)
     {
-        RetornarObra obra = _service.Inserir(obraDto);
+        RetornarObra obra = await _service.Inserir(obraDto);
         return CreatedAtAction(nameof(RetornarPorId),
             new { id = obra.Id },
             obra);
     }
 
     [HttpGet("{id}")]
-    public IActionResult RetornarPorId(Guid id)
+    public async Task<IActionResult> RetornarPorId(Guid id)
     {
-        if (_service.RetornarPorId(id) is null) return NotFound();
-        else return Ok(_service.RetornarPorId(id));
+        if (await _service.RetornarPorId(id) is null) return NotFound();
+        else return Ok(await _service.RetornarPorId(id));
     }
 
     [HttpGet]
-    public IActionResult RetornarTodos()
+    public async Task<IActionResult> RetornarTodos()
     {
-        return Ok(_service.RetornarTodos());
+        return Ok(await _service.RetornarTodos());
     }
 }

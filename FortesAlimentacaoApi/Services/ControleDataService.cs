@@ -2,10 +2,11 @@
 using FortesAlimentacaoApi.Database.Dtos.ControleData;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Services;
 
-public class ControleDataService : IGlobalService<InserirControleData, RetornarControleData, AtualizarControleData>
+public class ControleDataService : IGlobalService<InserirControleData, RetornarControleData>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
@@ -16,32 +17,28 @@ public class ControleDataService : IGlobalService<InserirControleData, RetornarC
         _mapper = mapper;
     }
 
-    public RetornarControleData Inserir(InserirControleData entity)
+    public async Task<RetornarControleData> Inserir(InserirControleData entity)
     {
         ControleData controleData = _mapper.Map<ControleData>(entity);
-        _context.ControleDatas.Add(controleData);
-        _context.SaveChanges();
+        await _context.ControleDatas.AddAsync(controleData);
+        await _context.SaveChangesAsync();
 
         return _mapper.Map<RetornarControleData>(controleData);
     }
 
-    public RetornarControleData RetornarPorId(Guid id)
+    public async Task<RetornarControleData> RetornarPorId(Guid id)
     {
-        return _mapper.Map<RetornarControleData>(_context.ControleDatas
-            .FirstOrDefault(controle => controle.Id == id));
+        return _mapper.Map<RetornarControleData>(await _context.ControleDatas
+            .FirstOrDefaultAsync(controle => controle.Id == id));
     }
 
-    public IEnumerable<RetornarControleData> RetornarTodos()
+    public async Task<IEnumerable<RetornarControleData>> RetornarTodos()
     {
         return _mapper.Map<IEnumerable<RetornarControleData>>(
-            _context.ControleDatas.ToList());
-    }
-    public void Atualizar(Guid id, AtualizarControleData entity)
-    {
-        throw new NotImplementedException();
+            await _context.ControleDatas.ToListAsync());
     }
 
-    public bool Deletar(Guid id)
+    public async Task<bool> Deletar(Guid id)
     {
         throw new NotImplementedException();
     }

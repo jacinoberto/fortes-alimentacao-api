@@ -22,4 +22,10 @@ public class Operario
 
     // Relacionamento
     public ICollection<Equipe> Equipes { get; set; }
+
+    // Métodos
+    public void InativarPerfil()
+    {
+        Status = false;
+    }
 }

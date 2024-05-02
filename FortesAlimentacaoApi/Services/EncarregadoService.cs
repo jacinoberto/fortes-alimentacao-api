@@ -2,10 +2,11 @@
 using FortesAlimentacaoApi.Database.Dtos.Encarregado;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Services;
 
-public class EncarregadoService : IGlobalService<InserirEncarregado, RetornarEncarregado, AtualizarEncarregado>
+public class EncarregadoService : IGlobalService<InserirEncarregado, RetornarEncarregado>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
@@ -16,42 +17,38 @@ public class EncarregadoService : IGlobalService<InserirEncarregado, RetornarEnc
         _mapper = mapper;
     }
 
-    public RetornarEncarregado Inserir(InserirEncarregado entity)
+    public async Task<RetornarEncarregado> Inserir(InserirEncarregado entity)
     {
         Encarregado encaregado = _mapper.Map<Encarregado>(entity);
-        _context.Encarregados.Add(encaregado);
-        _context.SaveChanges();
+        await _context.Encarregados.AddAsync(encaregado);
+        await _context.SaveChangesAsync();
 
         return _mapper.Map<RetornarEncarregado>(encaregado);
     }
 
-    public RetornarEncarregado RetornarPorId(Guid id)
+    public async Task<RetornarEncarregado> RetornarPorId(Guid id)
     {
-        return _mapper.Map<RetornarEncarregado>(_context.Encarregados
-            .Where<Encarregado>(encarregado => encarregado.Gestor.Status == true)
-            .FirstOrDefault(encarregado => encarregado.Id == id));
+        return _mapper.Map<RetornarEncarregado>(await _context.Encarregados
+            .Where(encarregado => encarregado.Gestor.Status == true)
+            .FirstOrDefaultAsync(encarregado => encarregado.Id == id));
     }
 
-    public IEnumerable<RetornarEncarregado> RetornarTodos()
+    public async Task<IEnumerable<RetornarEncarregado>> RetornarTodos()
     {
-        return _mapper.Map<IEnumerable<RetornarEncarregado>>(_context.Encarregados
-            .Where<Encarregado>(encarregado => encarregado.Gestor.Status == true)
-            .ToList());
-    }
-    public void Atualizar(Guid id, AtualizarEncarregado entity)
-    {
-        throw new NotImplementedException();
+        return _mapper.Map<IEnumerable<RetornarEncarregado>>(await _context.Encarregados
+            .Where(encarregado => encarregado.Gestor.Status == true)
+            .ToListAsync());
     }
 
-    public bool Deletar(Guid id)
+    public async Task<bool> Deletar(Guid id)
     {
-        Encarregado? encarregado = _context.Encarregados
-            .FirstOrDefault(encarregado => encarregado.Id == id);
+        Encarregado? encarregado = await _context.Encarregados
+            .FirstOrDefaultAsync(encarregado => encarregado.Id == id);
 
         if (encarregado is not null)
         {
             encarregado.InativarPerfil();
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
         else return false;

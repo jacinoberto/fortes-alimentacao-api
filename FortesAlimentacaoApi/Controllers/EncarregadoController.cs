@@ -16,31 +16,31 @@ public class EncarregadoController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Iserir([FromBody] InserirEncarregado encarregadoDto)
+    public async Task<IActionResult> Iserir([FromBody] InserirEncarregado encarregadoDto)
     {
-        RetornarEncarregado encarregado = _service.Inserir(encarregadoDto);
+        RetornarEncarregado encarregado = await _service.Inserir(encarregadoDto);
         return CreatedAtAction(nameof(RetornarPorId),
             new { id = encarregado.Id},
             encarregado);
     }
 
     [HttpGet("{id}")]
-    public IActionResult RetornarPorId(Guid id) 
+    public async Task<IActionResult> RetornarPorId(Guid id) 
     {
-        if (_service.RetornarPorId(id) is null) return NotFound();
-        else return Ok(_service.RetornarPorId(id));
+        if (await _service.RetornarPorId(id) is null) return NotFound();
+        else return Ok(await _service.RetornarPorId(id));
     }
 
     [HttpGet]
-    public IActionResult RetornarTodos()
+    public async Task<IActionResult> RetornarTodos()
     {
-        return Ok(_service.RetornarTodos());
+        return Ok(await _service.RetornarTodos());
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Deletar(Guid id)
+    public async Task<IActionResult> Deletar(Guid id)
     {
-        if (_service.Deletar(id)) return NoContent();
+        if (await _service.Deletar(id)) return NoContent();
         else return NotFound();
     }
 }

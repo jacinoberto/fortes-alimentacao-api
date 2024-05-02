@@ -2,11 +2,12 @@
 using FortesAlimentacaoApi.Database.Dtos.Obra;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Services;
 
-public class ObraService : IGlobalService<InserirObra, RetornarObra, AtualizarObra>
+public class ObraService : IGlobalService<InserirObra, RetornarObra>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
@@ -17,33 +18,29 @@ public class ObraService : IGlobalService<InserirObra, RetornarObra, AtualizarOb
         _mapper = mapper;
     }
 
-    public RetornarObra Inserir(InserirObra entity)
+    public async Task<RetornarObra> Inserir(InserirObra entity)
     {
         Obra obra = _mapper.Map<Obra>(entity);
-        _context.Obras.Add(obra);
-        _context.SaveChanges();
+        await _context.Obras.AddAsync(obra);
+        await _context.SaveChangesAsync();
 
         return _mapper.Map<RetornarObra>(obra);
     }
 
-    public RetornarObra RetornarPorId(Guid id)
+    public async Task<RetornarObra> RetornarPorId(Guid id)
     {
         return _mapper.Map<RetornarObra>(
-            _context.Obras.Include(obra => obra.Endereco)
-            .FirstOrDefault(obra => obra.Id == id));
+            await _context.Obras.Include(obra => obra.Endereco)
+            .FirstOrDefaultAsync(obra => obra.Id == id));
     }
 
-    public IEnumerable<RetornarObra> RetornarTodos()
+    public async Task<IEnumerable<RetornarObra>> RetornarTodos()
     {
         return _mapper.Map<IEnumerable<RetornarObra>>(
-            _context.Obras.Include(obra => obra.Endereco).ToList());
-    }
-    public void Atualizar(Guid id, AtualizarObra entity)
-    {
-        throw new NotImplementedException();
+            await _context.Obras.Include(obra => obra.Endereco).ToListAsync());
     }
 
-    public bool Deletar(Guid id)
+    public async Task<bool> Deletar(Guid id)
     {
         throw new NotImplementedException();
     }

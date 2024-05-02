@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Services;
 
-public class EquipeService : IGlobalService<InserirEquipe, RetornarEquipe, AtualizarEquipe>
+public class EquipeService : IGlobalService<InserirEquipe, RetornarEquipe>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
@@ -18,42 +18,38 @@ public class EquipeService : IGlobalService<InserirEquipe, RetornarEquipe, Atual
     }
 
 
-    public RetornarEquipe Inserir(InserirEquipe entity)
+    public async Task<RetornarEquipe> Inserir(InserirEquipe entity)
     {
         Equipe equipe = _mapper.Map<Equipe>(entity);
-        _context.Equipes.Add(equipe);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+        await _context.Equipes.AddAsync(equipe);
 
         return _mapper.Map<RetornarEquipe>(equipe);
     }
 
-    public RetornarEquipe RetornarPorId(Guid id)
+    public async Task<RetornarEquipe> RetornarPorId(Guid id)
     {
-        return _mapper.Map<RetornarEquipe>(_context.Equipes
-            .Where<Equipe>(equipe => equipe.GestaoEquipe.Status == true)
-            .Include(equipe => equipe.GestaoEquipe)
-            .Include(equipe => equipe.GestaoEquipe.Obra)
-            .Include(equipe => equipe.GestaoEquipe.Encarregado)
-            .Include(equipe =>equipe.Operario)
-            .FirstOrDefault(equipe => equipe.Id == id));
-    }
-
-    public IEnumerable<RetornarEquipe> RetornarTodos()
-    {
-        return _mapper.Map<IEnumerable<RetornarEquipe>>(_context.Equipes
-            .Where<Equipe>(equipe => equipe.GestaoEquipe.Status == true)
+        return _mapper.Map<RetornarEquipe>(await _context.Equipes
+            .Where(equipe => equipe.GestaoEquipe.Status == true)
             .Include(equipe => equipe.GestaoEquipe)
             .Include(equipe => equipe.GestaoEquipe.Obra)
             .Include(equipe => equipe.GestaoEquipe.Encarregado)
             .Include(equipe => equipe.Operario)
-            .ToList());
-    }
-    public void Atualizar(Guid id, AtualizarEquipe entity)
-    {
-        throw new NotImplementedException();
+            .FirstOrDefaultAsync(equipe => equipe.Id == id));
     }
 
-    public bool Deletar(Guid id)
+    public async Task<IEnumerable<RetornarEquipe>> RetornarTodos()
+    {
+        return _mapper.Map<IEnumerable<RetornarEquipe>>(await _context.Equipes
+            .Where(equipe => equipe.GestaoEquipe.Status == true)
+            .Include(equipe => equipe.GestaoEquipe)
+            .Include(equipe => equipe.GestaoEquipe.Obra)
+            .Include(equipe => equipe.GestaoEquipe.Encarregado)
+            .Include(equipe => equipe.Operario)
+            .ToListAsync());
+    }
+
+    public async Task<bool> Deletar(Guid id)
     {
         throw new NotImplementedException();
     }

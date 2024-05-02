@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Services;
 
-public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao, AtualizarRefeicao>
+public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
@@ -17,38 +17,33 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao,
         _mapper = mapper;
     }
 
-    public RetornarRefeicao Inserir(InserirRefeicao entity)
+    public async Task<RetornarRefeicao> Inserir(InserirRefeicao entity)
     {
         Refeicao refeicao = _mapper.Map<Refeicao>(entity);
-        _context.Refeicoes.Add(refeicao);
-        _context.SaveChanges();
+        await _context.Refeicoes.AddAsync(refeicao);
+        await _context.SaveChangesAsync();
 
         return _mapper.Map<RetornarRefeicao>(refeicao);
     }
 
-    public RetornarRefeicao RetornarPorId(Guid id)
+    public async Task<RetornarRefeicao> RetornarPorId(Guid id)
     {
         return _mapper.Map<RetornarRefeicao>(
-            _context.Refeicoes
+            await _context.Refeicoes
             .Include(refeicao => refeicao.Equipe)
             .Include(refeicao => refeicao.Equipe.Operario)
-            .FirstOrDefault(refeicao => refeicao.Id == id));
+            .FirstOrDefaultAsync(refeicao => refeicao.Id == id));
     }
 
-    public IEnumerable<RetornarRefeicao> RetornarTodos()
+    public async Task<IEnumerable<RetornarRefeicao>> RetornarTodos()
     {
-        return _mapper.Map<IEnumerable<RetornarRefeicao>>(_context.Refeicoes
+        return _mapper.Map<IEnumerable<RetornarRefeicao>>(await _context.Refeicoes
             .Include(refeicao => refeicao.Equipe)
             .Include(refeicao => refeicao.Equipe.Operario)
-            .ToList());
+            .ToListAsync());
     }
 
-    public void Atualizar(Guid id, AtualizarRefeicao entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool Deletar(Guid id)
+    public async Task<bool> Deletar(Guid id)
     {
         throw new NotImplementedException();
     }

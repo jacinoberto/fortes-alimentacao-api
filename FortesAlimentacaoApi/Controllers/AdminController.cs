@@ -17,34 +17,34 @@ public class AdminController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Insert([FromBody] InserirAdmin adminDto)
+    public async Task<IActionResult> Insert([FromBody] InserirAdmin adminDto)
     {
-        RetornoAdmin admin = _service.Inserir(adminDto);
+        RetornoAdmin admin = await _service.Inserir(adminDto);
         return CreatedAtAction(nameof(GetById),
             new {id = admin.Id},
             admin);
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(_service.RetornarTodos());
+        return Ok(await _service.RetornarTodos());
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetById(Guid id) 
+    public async Task<IActionResult> GetById(Guid id) 
     {
-        if (_service.RetornarPorId(id) is null) return NotFound();
+        if (await _service.RetornarPorId(id) is null) return NotFound();
 
-        return Ok(_service.RetornarPorId(id));
+        return Ok(await _service.RetornarPorId(id));
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id) 
+    public async Task<IActionResult> Delete(Guid id) 
     {
-        if (!_service.Deletar(id)) return NotFound();
+        if (!await _service.Deletar(id)) return NotFound();
 
-        _service.Deletar(id);
+        await _service.Deletar(id);
         return NoContent();
     }
 }

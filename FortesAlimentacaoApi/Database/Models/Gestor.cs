@@ -20,4 +20,10 @@ public class Gestor
 
     [Column("status")]
     public required bool Status { get; set; } = true;
+
+    // Metodos
+    public void InvativarPerfil()
+    {
+        Status = false;
+    }
 }

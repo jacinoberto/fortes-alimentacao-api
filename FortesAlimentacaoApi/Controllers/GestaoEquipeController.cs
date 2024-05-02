@@ -17,30 +17,30 @@ public class GestaoEquipeController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Inserir([FromBody] InserirGestaoEquipe gestaoDto)
+    public async Task<IActionResult> Inserir([FromBody] InserirGestaoEquipe gestaoDto)
     {
-        RetornarGestaoEquipe gestao = _service.Inserir(gestaoDto);
+        RetornarGestaoEquipe gestao = await _service.Inserir(gestaoDto);
         return CreatedAtAction(nameof(RetornarPorId),
             new { id = gestao.Id },
             gestao);
     }
 
     [HttpGet("{id}")]
-    public IActionResult RetornarPorId(Guid id)
+    public async Task<IActionResult> RetornarPorId(Guid id)
     {
-        return Ok(_service.RetornarPorId(id));
+        return Ok(await _service.RetornarPorId(id));
     }
 
     [HttpGet]
-    public IActionResult RetornarTodos()
+    public async Task<IActionResult> RetornarTodos()
     {
-        return Ok(_service.RetornarTodos());
+        return Ok(await _service.RetornarTodos());
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Deletar(Guid id) 
+    public async Task<IActionResult> Deletar(Guid id) 
     {
-        if (_service.Deletar(id)) return NoContent();
+        if (await _service.Deletar(id)) return NoContent();
         else return NotFound();
     }
 }

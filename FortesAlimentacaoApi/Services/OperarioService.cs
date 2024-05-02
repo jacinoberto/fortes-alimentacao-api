@@ -4,8 +4,9 @@ using AutoMapper;
 using FortesAlimentacaoApi.Database.Dtos.Operario;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
+using Microsoft.EntityFrameworkCore;
 
-public class OperarioService : IGlobalService<InserirOperario, RetornarOperario, AtualizarOperario>
+public class OperarioService : IGlobalService<InserirOperario, RetornarOperario>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
@@ -16,43 +17,41 @@ public class OperarioService : IGlobalService<InserirOperario, RetornarOperario,
         _mapper = mapper;
     }
 
-    public IEnumerable<RetornarOperario> RetornarTodos()
-    {
-        return _mapper.Map<IEnumerable<RetornarOperario>>(
-            _context.Operarios.Where<Operario>(
-                operario => operario.Status == true)
-            .ToList());
-    }
-
-    public RetornarOperario RetornarPorId(Guid id)
-    {
-        return _mapper.Map<RetornarOperario>(_context.Operarios
-            .Where<Operario>(operario => operario.Status == true)
-            .FirstOrDefault(operario => operario.Id == id));
-    }
-
-    public RetornarOperario Inserir(InserirOperario entity)
+    public async Task<RetornarOperario> Inserir(InserirOperario entity)
     {
         Operario operario = _mapper.Map<Operario>(entity);
-        _context.Add(operario);
-        _context.SaveChanges();
+        await _context.AddAsync(operario);
+        await _context.SaveChangesAsync();
 
         return _mapper.Map<RetornarOperario>(operario);
     }
 
-    public void Atualizar(Guid id, AtualizarOperario entity)
+    public async Task<IEnumerable<RetornarOperario>> RetornarTodos()
     {
-        throw new NotImplementedException();
+        return _mapper.Map<IEnumerable<RetornarOperario>>(
+            await _context.Operarios.Where(
+                operario => operario.Status == true)
+            .ToListAsync());
     }
-    public bool Deletar(Guid id)
+
+    public async Task<RetornarOperario> RetornarPorId(Guid id)
+    {
+        return _mapper.Map<RetornarOperario>(await _context.Operarios
+            .Where(operario => operario.Status == true)
+            .FirstOrDefaultAsync(operario => operario.Id == id));
+    }
+
+    public async Task<bool> Deletar(Guid id)
     {
         Operario? operario = _context.Operarios
             .FirstOrDefault(operario => operario.Id == id);
 
-        if (operario is null) return false;
-
-        operario.Status = false;
-        _context.SaveChanges();
-        return true;
+        if (operario is not null)
+        {
+            operario.InativarPerfil();
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        else return false;
     }
 }
