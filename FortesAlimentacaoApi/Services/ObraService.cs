@@ -2,7 +2,6 @@
 using FortesAlimentacaoApi.Database.Dtos.Obra;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Services;
@@ -43,5 +42,12 @@ public class ObraService : IGlobalService<InserirObra, RetornarObra>
     public async Task<bool> Deletar(Guid id)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<RetornarObraSelect>> RetornarSelect(string identificacao)
+    {
+        return _mapper.Map<IEnumerable<RetornarObraSelect>>(await _context.Obras
+            .Where(obra => obra.Identificacao.ToUpper().Contains(identificacao.ToUpper()))
+            .ToListAsync());
     }
 }

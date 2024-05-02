@@ -12,5 +12,6 @@ public class OperarioProfile : Profile
         CreateMap<Operario, RetornarOperario>();
         CreateMap<Operario, RetornoOperarioEquipe>();
         CreateMap<Operario, RetornoOperarioRefeicao>();
+        CreateMap<Operario, RetornarOperarioSelect>();
     }
 }

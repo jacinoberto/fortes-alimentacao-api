@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FortesAlimentacaoApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/encarregado")]
 public class EncarregadoController : ControllerBase
 {
     private readonly EncarregadoService _service;
@@ -42,5 +42,11 @@ public class EncarregadoController : ControllerBase
     {
         if (await _service.Deletar(id)) return NoContent();
         else return NotFound();
+    }
+
+    [HttpGet("select")]
+    public async Task<IActionResult> EncarregadoSelect([FromQuery] string nome)
+    {
+        return Ok(await _service.EncarregadoSelect(nome));
     }
 }

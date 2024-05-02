@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FortesAlimentacaoApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/operario")]
 public class OperarioController : ControllerBase
 {
     private OperarioService _service;
@@ -36,6 +36,12 @@ public class OperarioController : ControllerBase
     public async Task<IActionResult> RetornarTodos()
     {
         return Ok(await _service.RetornarTodos());
+    }
+
+    [HttpGet("select")]
+    public async Task<IActionResult> RetornarSelect([FromQuery] string nome)
+    {
+        return Ok(await _service.RetornarSelect(nome));
     }
 
     [HttpDelete]

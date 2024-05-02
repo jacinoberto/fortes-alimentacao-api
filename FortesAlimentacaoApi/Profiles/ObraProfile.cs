@@ -19,5 +19,7 @@ public class ObraProfile : Profile
             .ReverseMap();
 
         CreateMap<Obra, RetornoObraGestao>();
+
+        CreateMap<Obra, RetornarObraSelect>();
     }
 }

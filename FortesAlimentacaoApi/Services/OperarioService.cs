@@ -54,4 +54,12 @@ public class OperarioService : IGlobalService<InserirOperario, RetornarOperario>
         }
         else return false;
     }
+
+    public async Task<IEnumerable<RetornarOperarioSelect>> RetornarSelect(string nome)
+    {
+        return _mapper.Map<IEnumerable<RetornarOperarioSelect>>(await _context.Operarios
+            .Where(operario => operario.Nome.ToUpper().Contains(nome.ToUpper()))
+            .Where(operario => operario.Status == true)
+            .ToListAsync());
+    }
 }
