@@ -10,5 +10,6 @@ public class ControleDataProfile : Profile
     {
         CreateMap<InserirControleData, ControleData>();
         CreateMap<ControleData, RetornarControleData>();
+        CreateMap<ControleData, RetornoControleDataRefeicao>();
     }
 }

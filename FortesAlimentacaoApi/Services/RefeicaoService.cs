@@ -35,6 +35,7 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
             await _context.Refeicoes
             .Include(refeicao => refeicao.Equipe)
             .Include(refeicao => refeicao.Equipe.Operario)
+            .Include(refeicao => refeicao.ControleData)
             .FirstOrDefaultAsync(refeicao => refeicao.Id == id));
     }
 
@@ -43,6 +44,17 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
         return _mapper.Map<IEnumerable<RetornarRefeicao>>(await _context.Refeicoes
             .Include(refeicao => refeicao.Equipe)
             .Include(refeicao => refeicao.Equipe.Operario)
+            .Include(refeicao => refeicao.ControleData)
+            .ToListAsync());
+    }
+
+    public async Task<IEnumerable<RetornarRefeicao>> RetornarTodosPorIdEncarregado(Guid id)
+    {
+        return _mapper.Map<IEnumerable<RetornarRefeicao>>(await _context.Refeicoes
+            .Where(refeicao => refeicao.Equipe.GestaoEquipe.EncarregadoId == id)
+            .Include(refeicao => refeicao.Equipe)
+            .Include(refeicao => refeicao.Equipe.Operario)
+            .Include(refeicao => refeicao.ControleData)
             .ToListAsync());
     }
 

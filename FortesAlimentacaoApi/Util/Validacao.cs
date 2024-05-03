@@ -45,7 +45,7 @@ public class Validacao
         if (data is DayOfWeek.Thursday)
         {
             IEnumerable<ControleData> datasValidas = datas
-                .Where(data => data.DataRefeicao > DateOnly.FromDateTime(DateTime.Today).AddDays(4)
+                .Where(data => data.DataRefeicao > DateOnly.FromDateTime(DateTime.Today).AddDays(3)
                 && data.DataRefeicao < data.DataRefeicao.AddDays(10))
                 .ToList();
 

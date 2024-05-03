@@ -4,15 +4,17 @@ using FortesAlimentacaoApi.Database.Models;
 
 namespace FortesAlimentacaoApi.Profiles;
 
-public class RefeicaoProfila : Profile
+public class RefeicaoProfile : Profile
 {
-    public RefeicaoProfila()
+    public RefeicaoProfile()
     {
         CreateMap<InserirRefeicao, Refeicao>();
 
         CreateMap<Refeicao, RetornarRefeicao>()
             .ForMember(refeicaoDto => refeicaoDto.Equipe,
             option => option.MapFrom(refeicao => refeicao.Equipe))
-            .ReverseMap();
+            .ReverseMap()
+            .ForMember(refeicao => refeicao.ControleData,
+            option => option.MapFrom(refeicaoDto => refeicaoDto.ControleData));
     }
 }

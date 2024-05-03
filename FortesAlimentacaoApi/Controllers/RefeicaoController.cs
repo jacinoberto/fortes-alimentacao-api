@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FortesAlimentacaoApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/refeicao")]
 public class RefeicaoController : ControllerBase
 {
     private readonly RefeicaoService _service;
@@ -35,6 +35,12 @@ public class RefeicaoController : ControllerBase
     public async Task<IActionResult> RetornarTodos()
     {
         return Ok(await _service.RetornarTodos());
+    }
+
+    [HttpGet("equipe/{id}")]
+    public async Task<IActionResult> RetornarTodosPorIdEncarregado(Guid id)
+    {
+        return Ok(await _service.RetornarTodosPorIdEncarregado(id));
     }
 
     [HttpPost("agenda")]

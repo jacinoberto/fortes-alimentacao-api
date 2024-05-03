@@ -1,4 +1,5 @@
-﻿using FortesAlimentacaoApi.Database.Dtos.Equipe;
+﻿using FortesAlimentacaoApi.Database.Dtos.ControleData;
+using FortesAlimentacaoApi.Database.Dtos.Equipe;
 using FortesAlimentacaoApi.Database.Dtos.Operario;
 
 namespace FortesAlimentacaoApi.Database.Dtos.Refeicao;
@@ -8,5 +9,6 @@ public record RetornarRefeicao(
     RetornoEquipeRefeicao Equipe,
     bool Cafe,
     bool Almoco,
-    bool Jantar
+    bool Jantar,
+    RetornoControleDataRefeicao ControleData
 );
