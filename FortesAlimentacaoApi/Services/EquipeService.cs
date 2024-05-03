@@ -21,8 +21,8 @@ public class EquipeService : IGlobalService<InserirEquipe, RetornarEquipe>
     public async Task<RetornarEquipe> Inserir(InserirEquipe entity)
     {
         Equipe equipe = _mapper.Map<Equipe>(entity);
-        await _context.SaveChangesAsync();
         await _context.Equipes.AddAsync(equipe);
+        await _context.SaveChangesAsync();
 
         return _mapper.Map<RetornarEquipe>(equipe);
     }

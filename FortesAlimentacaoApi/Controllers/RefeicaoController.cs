@@ -36,4 +36,11 @@ public class RefeicaoController : ControllerBase
     {
         return Ok(await _service.RetornarTodos());
     }
+
+    [HttpPost("agenda")]
+    public IActionResult Agendar()
+    {
+        _service.Agenda();
+        return Ok();
+    }
 }

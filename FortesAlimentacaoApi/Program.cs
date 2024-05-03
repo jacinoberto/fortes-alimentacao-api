@@ -1,5 +1,6 @@
 using FortesAlimentacaoApi.Infra.Context;
 using FortesAlimentacaoApi.Services;
+using FortesAlimentacaoApi.Util;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,7 @@ builder.Services.AddScoped<GestaoEquipeService>();
 builder.Services.AddScoped<EquipeService>();
 builder.Services.AddScoped<ControleDataService>();
 builder.Services.AddScoped<RefeicaoService>();
+builder.Services.AddScoped<Validacao>();
 
 var app = builder.Build();
 

@@ -2,6 +2,7 @@
 using FortesAlimentacaoApi.Database.Dtos.Refeicao;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
+using FortesAlimentacaoApi.Util;
 using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Services;
@@ -10,11 +11,13 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
+    private readonly Validacao _validacao;
 
-    public RefeicaoService(FortesAlimentacaoDbContext context, IMapper mapper)
+    public RefeicaoService(FortesAlimentacaoDbContext context, IMapper mapper, Validacao validacao)
     {
         _context = context;
         _mapper = mapper;
+        _validacao = validacao;
     }
 
     public async Task<RetornarRefeicao> Inserir(InserirRefeicao entity)
@@ -46,5 +49,13 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
     public async Task<bool> Deletar(Guid id)
     {
         throw new NotImplementedException();
+    }
+
+    public void Agenda()
+    {
+        IEnumerable<Equipe> equipes = _context.Equipes.Where(equipe => equipe.GestaoEquipe.Status == true).ToList();
+        IEnumerable<ControleData> datas = _context.ControleDatas.ToList();
+
+        _validacao.AbrirAgenda(equipes, datas);
     }
 }
