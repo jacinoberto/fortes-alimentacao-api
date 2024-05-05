@@ -16,13 +16,13 @@ public class Refeicao
     public Guid EquipeId { get; set; }
 
     [Column("cafe")]
-    public bool Cafe { get; set; }
+    public bool Cafe { get; set; } = true;
 
     [Column("almoco")]
-    public bool Almoco { get; set; }
+    public bool Almoco { get; set; } = true;
 
     [Column("jantar")]
-    public bool Jantar { get; set; }
+    public bool Jantar { get; set; } = true;
 
     [Column("controle_data_id")]
     [ForeignKey(nameof(ControleData))]

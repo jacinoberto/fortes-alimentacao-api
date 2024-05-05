@@ -45,16 +45,16 @@ public class RefeicaoController : ControllerBase
     }
 
     [HttpPost("agenda")]
-    public IActionResult Agendar()
+    public async Task<IActionResult> Agendar()
     {
-        _service.Agenda();
+        await _service.Agenda();
         return Ok();
     }
 
     [HttpPut]
-    public IActionResult AtualizarRefeicoes([FromBody] Collection<AtualizarRefeicao> refeicoesDto)
+    public async Task<IActionResult> AtualizarRefeicoes([FromBody] Collection<AtualizarRefeicao> refeicoesDto)
     {
         
-        return Ok(_service.AtualizarRefeicoes(refeicoesDto));
+        return Ok(await _service.AtualizarRefeicoes(refeicoesDto));
     }
 }

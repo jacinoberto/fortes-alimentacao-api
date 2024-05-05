@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using FortesAlimentacaoApi.Database.Dtos.ControleData;
 using FortesAlimentacaoApi.Database.Dtos.Refeicao;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
-using FortesAlimentacaoApi.Services;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
+using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Util;
 
@@ -12,69 +12,51 @@ public class AbrirAgenda
     private FortesAlimentacaoDbContext _context;
     private IMapper _mapper;
 
+
     public AbrirAgenda(FortesAlimentacaoDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
     }
 
-    public void ValidarData(Guid id, AtualizarRefeicao refeicaoDto)
+    public async Task ConferirControleDatas(IEnumerable<ControleData> datas)
     {
-        Refeicao? refeicao = _context.Refeicoes
-            .FirstOrDefault(refeicao => refeicao.Id == id);
+        DateOnly dataDia = DateOnly.FromDateTime(DateTime.Today);
 
-        ControleData? controleData = _context.ControleDatas
-            .FirstOrDefault(data => data.Id == refeicao.ControleDataId);
-
-        DayOfWeek diaSemana = controleData.DataRefeicao.DayOfWeek;
-
-        TimeSpan cafe = new TimeSpan(07,0,0);
-        TimeSpan almoco = new TimeSpan(12,0,0);
-        TimeSpan jantar = new TimeSpan(19,0,0);
-        
-        if (diaSemana is DayOfWeek.Saturday
-            && diaSemana is DayOfWeek.Sunday
-            && controleData.Atipico is true)
+        for (int i = 1; i <= 7; i++)
         {
-        }
-    }
+            dataDia = dataDia.AddDays(1);
 
-    public void ValidarDataAtualizacao(IEnumerable<AtualizarRefeicao> refeicoesAtualuzar)
-    {
-        IEnumerable<Refeicao> refeicoes = _mapper.Map<IEnumerable<Refeicao>>(refeicoesAtualuzar);
+            ControleData? controleData = await _context.ControleDatas
+                .FirstOrDefaultAsync(data => data.DataRefeicao == dataDia);
 
-        TimeOnly cafe = new (7,0,0);
-        TimeOnly almoco = new (12,0,0);
-        TimeOnly jantar = new (19,0,0);
-
-        foreach (Refeicao refeicao in refeicoes)
-        {
-            DayOfWeek diaSemana = refeicao.ControleData.DataRefeicao.DayOfWeek;
-
-            if (diaSemana is DayOfWeek.Saturday
-                && diaSemana is DayOfWeek.Sunday
-                && refeicao.ControleData.Atipico is true)
+            if (controleData is null)
             {
-                DateTime horaAtual = DateTime.Now;
-
-                DateTime cafeAtual = refeicao.ControleData.DataRefeicao.ToDateTime(new TimeOnly(horaAtual.Hour, horaAtual.Minute, horaAtual.Second));
-                DateTime almocoAtual = refeicao.ControleData.DataRefeicao.ToDateTime(almoco);
-                DateTime jantarAtual = refeicao.ControleData.DataRefeicao.ToDateTime(jantar);
+                InserirControleData data = new(dataDia, null, false);
+                await _context.AddAsync(_mapper.Map<ControleData>(data));
+                await _context.SaveChangesAsync();
             }
         }
     }
 
-    public void AberturaDeAgenda(IEnumerable<Equipe> equipes, IEnumerable<ControleData> datas)
+    public async Task AberturaDeAgenda(IEnumerable<Equipe> equipes, IEnumerable<ControleData> datas)
     {
+        await ConferirControleDatas(datas);
+
         var data = DateTime.Today.DayOfWeek;
 
-        if (data is DayOfWeek.Thursday)
+        if (data is DayOfWeek.Sunday)
         {
-            IEnumerable<ControleData> datasValidas = datas
-                .Where(data => data.DataRefeicao > DateOnly.FromDateTime(DateTime.Today).AddDays(3)
-                && data.DataRefeicao < data.DataRefeicao.AddDays(10))
-                .ToList();
+            IEnumerable<ControleData> datasValidas = [];
 
+            await Task.Run(() => 
+            {
+                datasValidas = _context.ControleDatas
+                .Where(data => data.DataRefeicao > DateOnly.FromDateTime(DateTime.Today)
+                && data.DataRefeicao < data.DataRefeicao.AddDays(7))
+                .ToList();
+            });           
+            
             foreach (ControleData controleData in datasValidas)
             {
                 foreach (Equipe equipe in equipes)
@@ -82,14 +64,11 @@ public class AbrirAgenda
 
                     InserirRefeicao refeicaoDto = new InserirRefeicao(
                         equipe.Id,
-                        true,
-                        true,
-                        true,
                         controleData.Id
                         );
 
-                    _context.Refeicoes.Add(_mapper.Map<Refeicao>(refeicaoDto));
-                    _context.SaveChanges();
+                    await _context.Refeicoes.AddAsync(_mapper.Map<Refeicao>(refeicaoDto));
+                    await _context.SaveChangesAsync();
                 }                    
             }
         }

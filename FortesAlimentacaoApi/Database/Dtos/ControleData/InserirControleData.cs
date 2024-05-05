@@ -2,6 +2,6 @@
 
 public record InserirControleData(
     DateOnly DataRefeicao,
-    string Descricao,
+    string? Descricao,
     bool Atipico
 );

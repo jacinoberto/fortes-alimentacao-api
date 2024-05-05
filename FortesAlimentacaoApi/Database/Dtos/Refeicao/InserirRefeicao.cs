@@ -2,8 +2,5 @@
 
 public record InserirRefeicao(
     Guid EquipeId,
-    bool Cafe,
-    bool Almoço,
-    bool Jantar,
     Guid ControleDataId
 );

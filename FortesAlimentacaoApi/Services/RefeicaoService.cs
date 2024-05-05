@@ -67,39 +67,28 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
         throw new NotImplementedException();
     }
 
-    public void Agenda()
+    public async Task Agenda()
     {
-        IEnumerable<Equipe> equipes = _context.Equipes.Where(equipe => equipe.GestaoEquipe.Status == true).ToList();
-        IEnumerable<ControleData> datas = _context.ControleDatas.ToList();
+        IEnumerable<Equipe> equipes = await _context.Equipes.Where(equipe => equipe.GestaoEquipe.Status == true).ToListAsync();
+        IEnumerable<ControleData> datas = await _context.ControleDatas.ToListAsync();
 
-        _validacao.AberturaDeAgenda(equipes, datas);
+        await _validacao.AberturaDeAgenda(equipes, datas);
     }
 
-    public IEnumerable<RetornarRefeicao> AtualizarRefeicoes(Collection<AtualizarRefeicao> refeicoesDto)
+    public async Task<IEnumerable<RetornarRefeicao>> AtualizarRefeicoes(Collection<AtualizarRefeicao> refeicoesDto)
     {
-        ICollection<RetornarRefeicao> rs = [];
+        Collection<Refeicao> refeicoes = [];
 
         foreach (AtualizarRefeicao refeicaoDto in refeicoesDto)
         {
-            Collection<Refeicao> refeicoes = _atualizacao
-                .RefeicoesPermitidasAtualizacoes(refeicaoDto);
+            Refeicao refeicao = _atualizacao.RefeicoesPermitidasAtualizacoes(refeicaoDto);
 
-            foreach (Refeicao refeicao in refeicoes)
+            if (refeicao is not null)
             {
-                Refeicao?  refe = _context.Refeicoes.FirstOrDefault(r => r.Id == refeicao.Id);
-
-                if (refe is not null)
-                {
-                    refe.Cafe = refeicao.Cafe;
-                    refe.Almoco = refeicao.Almoco;
-                    refe.Jantar = refeicao.Jantar;
-                    _context.SaveChanges();
-                }
-
-                rs.Add(_mapper.Map<RetornarRefeicao>(refeicao));
+                refeicoes.Add(refeicao);
             }
         }
 
-        return rs;
+        return await _atualizacao.RefeicoesAtualizadas(refeicoes);
     }
 }

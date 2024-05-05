@@ -36,7 +36,14 @@ public class teste
         }
         else Console.WriteLine(false);
 
-        Console.WriteLine("Data: {0}\t{1}", teste, teste2);
+        DateOnly dataDia = DateOnly.FromDateTime(DateTime.Today);
+
+        for (int i =1; i <= 7; i++)
+        {
+            dataDia = dataDia.AddDays(1);
+
+            Console.WriteLine(dataDia);
+        }
 
         return dia.ToString();
     }

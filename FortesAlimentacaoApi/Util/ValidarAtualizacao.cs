@@ -23,7 +23,7 @@ public class ValidarAtualizacao
         Refeicao? refeicao = _mapper.Map<Refeicao>(_context.Refeicoes
             .Include(refeicao => refeicao.ControleData)
             .FirstOrDefault(refeicao => refeicao.Id == refeicaoDto.Id));
-        
+
         if(refeicao != null)
         {
             DayOfWeek diaSemana = refeicao.ControleData.DataRefeicao.DayOfWeek;
@@ -35,9 +35,8 @@ public class ValidarAtualizacao
                 return new RefeicaoFiltro(refeicao, refeicaoDto);
             }
         }
-        Console.WriteLine("Atipico");
-
         return null;
+        
     }
 
     public RefeicaoFiltro? FiltrarDiasNaoAtipicos(AtualizarRefeicao refeicaoDto)
@@ -53,9 +52,8 @@ public class ValidarAtualizacao
             return new RefeicaoFiltro(refeicao, refeicaoDto);
         }
 
-        Console.WriteLine("Não atipico");
-
         return null;
+
     }
 
     public Refeicao? ValidarDatasAtipicas(AtualizarRefeicao refeicaoAtualizar)
@@ -76,7 +74,7 @@ public class ValidarAtualizacao
             TimeSpan diferenca = new TimeSpan(0, 12, 0, 0);
             TimeSpan tempo = new TimeSpan();
 
-            if (refeicao.Cafe != refeicaoDto.Cafe) 
+            if (refeicao.Cafe != refeicaoDto.Cafe)
             {
                 dataHoraRefeicao = refeicao.ControleData.DataRefeicao.ToDateTime(cafe);
                 tempo = dataHoraRefeicao - dataHoraAtual;
@@ -87,7 +85,7 @@ public class ValidarAtualizacao
                 }
             }
 
-            if (refeicao.Almoco != refeicaoDto.Almoco) 
+            if (refeicao.Almoco != refeicaoDto.Almoco)
             {
                 dataHoraRefeicao = refeicao.ControleData.DataRefeicao.ToDateTime(almoco);
                 tempo = dataHoraRefeicao - dataHoraAtual;
@@ -172,14 +170,34 @@ public class ValidarAtualizacao
         return null;
     }
 
-    public Collection<Refeicao> RefeicoesPermitidasAtualizacoes(AtualizarRefeicao refeicaoDto)
+    public Refeicao RefeicoesPermitidasAtualizacoes(AtualizarRefeicao refeicaoDto)
     {
-        Collection<Refeicao> refeicoes = [];
-
-        if (ValidarDatasAtipicas(refeicaoDto) is not null) refeicoes.Add(ValidarDatasAtipicas(refeicaoDto));
+        if (ValidarDatasAtipicas(refeicaoDto) is not null) return ValidarDatasAtipicas(refeicaoDto);
         
-        if (ValidarDatasNaoAtipicas(refeicaoDto) is not null) refeicoes.Add(ValidarDatasNaoAtipicas(refeicaoDto));
+        if (ValidarDatasNaoAtipicas(refeicaoDto) is not null) return ValidarDatasNaoAtipicas(refeicaoDto);
 
-        return refeicoes;
+        return null;
+    }
+
+    public async Task<Collection<RetornarRefeicao>> RefeicoesAtualizadas(Collection<Refeicao> refeicoes)
+    {
+        Collection<RetornarRefeicao> refeicoesAtualizadas = [];
+
+        foreach (Refeicao refeicao in refeicoes)
+        {
+            Refeicao? refe = await _context.Refeicoes.FirstOrDefaultAsync(r => r.Id == refeicao.Id);
+
+            if (refe is not null)
+            {
+                refe.Cafe = refeicao.Cafe;
+                refe.Almoco = refeicao.Almoco;
+                refe.Jantar = refeicao.Jantar;
+                await _context.SaveChangesAsync();
+            }
+
+            refeicoesAtualizadas.Add(_mapper.Map<RetornarRefeicao>(refeicao));
+        }
+
+        return refeicoesAtualizadas;
     }
 }

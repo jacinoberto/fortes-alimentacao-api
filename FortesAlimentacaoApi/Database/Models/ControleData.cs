@@ -9,17 +9,18 @@ public class ControleData
     [Key]
     [Column("id_controle_data")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public required Guid Id { get; set; }
+    public  Guid Id { get; set; }
 
     [Column("data_refeicao")]
-    public required DateOnly DataRefeicao { get; set; }
+    public  DateOnly DataRefeicao { get; set; }
 
     [Column("descricao")]
     public string? Descricao { get; set; }
 
     [Column("atipico")]
-    public required bool Atipico { get; set; }
+    public  bool Atipico { get; set; }
 
     // Relacionamento
     public ICollection<Refeicao> Refeicoes { get; set; }
+
 }
