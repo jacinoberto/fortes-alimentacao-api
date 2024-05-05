@@ -21,7 +21,7 @@ public class AbrirAgenda
 
     public async Task ConferirControleDatas(IEnumerable<ControleData> datas)
     {
-        DateOnly dataDia = DateOnly.FromDateTime(DateTime.Today);
+        DateOnly dataDia = DateOnly.FromDateTime(DateTime.Today).AddDays(3);
 
         for (int i = 1; i <= 7; i++)
         {
