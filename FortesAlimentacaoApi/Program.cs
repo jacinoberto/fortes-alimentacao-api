@@ -41,7 +41,8 @@ builder.Services.AddScoped<GestaoEquipeService>();
 builder.Services.AddScoped<EquipeService>();
 builder.Services.AddScoped<ControleDataService>();
 builder.Services.AddScoped<RefeicaoService>();
-builder.Services.AddScoped<Validacao>();
+builder.Services.AddScoped<AbrirAgenda>();
+builder.Services.AddScoped<ValidarAtualizacao>();
 
 var app = builder.Build();
 

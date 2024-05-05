@@ -17,7 +17,26 @@ public class teste
 
         TimeSpan diferenca = data - agora;
 
-        Console.WriteLine(diferenca);
+        DateOnly d = new DateOnly(2024,05,05);
+        TimeOnly t = new TimeOnly(09,56,0);
+
+        DateOnly e = new DateOnly(2024, 05, 06);
+        TimeOnly j = new TimeOnly(12, 0, 0);
+
+        DateTime ttt = d.ToDateTime(t);
+        DateTime ddd = e.ToDateTime(j);
+
+        TimeSpan teste = ddd - ttt;
+
+        TimeSpan teste2 = new(2,1,30,0);
+
+        if(teste >= teste2)
+        {
+            Console.WriteLine(true);
+        }
+        else Console.WriteLine(false);
+
+        Console.WriteLine("Data: {0}\t{1}", teste, teste2);
 
         return dia.ToString();
     }

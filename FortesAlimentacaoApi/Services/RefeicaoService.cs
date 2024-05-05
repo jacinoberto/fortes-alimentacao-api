@@ -4,6 +4,7 @@ using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
 using FortesAlimentacaoApi.Util;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 
 namespace FortesAlimentacaoApi.Services;
 
@@ -11,13 +12,16 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
-    private readonly Validacao _validacao;
+    private readonly AbrirAgenda _validacao;
+    private readonly ValidarAtualizacao _atualizacao;
 
-    public RefeicaoService(FortesAlimentacaoDbContext context, IMapper mapper, Validacao validacao)
+    public RefeicaoService(FortesAlimentacaoDbContext context, IMapper mapper,
+        AbrirAgenda validacao, ValidarAtualizacao atualizacao)
     {
         _context = context;
         _mapper = mapper;
         _validacao = validacao;
+        _atualizacao = atualizacao;
     }
 
     public async Task<RetornarRefeicao> Inserir(InserirRefeicao entity)
@@ -68,6 +72,34 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
         IEnumerable<Equipe> equipes = _context.Equipes.Where(equipe => equipe.GestaoEquipe.Status == true).ToList();
         IEnumerable<ControleData> datas = _context.ControleDatas.ToList();
 
-        _validacao.AbrirAgenda(equipes, datas);
+        _validacao.AberturaDeAgenda(equipes, datas);
+    }
+
+    public IEnumerable<RetornarRefeicao> AtualizarRefeicoes(Collection<AtualizarRefeicao> refeicoesDto)
+    {
+        ICollection<RetornarRefeicao> rs = [];
+
+        foreach (AtualizarRefeicao refeicaoDto in refeicoesDto)
+        {
+            Collection<Refeicao> refeicoes = _atualizacao
+                .RefeicoesPermitidasAtualizacoes(refeicaoDto);
+
+            foreach (Refeicao refeicao in refeicoes)
+            {
+                Refeicao?  refe = _context.Refeicoes.FirstOrDefault(r => r.Id == refeicao.Id);
+
+                if (refe is not null)
+                {
+                    refe.Cafe = refeicao.Cafe;
+                    refe.Almoco = refeicao.Almoco;
+                    refe.Jantar = refeicao.Jantar;
+                    _context.SaveChanges();
+                }
+
+                rs.Add(_mapper.Map<RetornarRefeicao>(refeicao));
+            }
+        }
+
+        return rs;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FortesAlimentacaoApi.Database.Dtos.Refeicao;
 using FortesAlimentacaoApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.ObjectModel;
 
 namespace FortesAlimentacaoApi.Controllers;
 
@@ -48,5 +49,12 @@ public class RefeicaoController : ControllerBase
     {
         _service.Agenda();
         return Ok();
+    }
+
+    [HttpPut]
+    public IActionResult AtualizarRefeicoes([FromBody] Collection<AtualizarRefeicao> refeicoesDto)
+    {
+        
+        return Ok(_service.AtualizarRefeicoes(refeicoesDto));
     }
 }

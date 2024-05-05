@@ -3,15 +3,16 @@ using FortesAlimentacaoApi.Database.Dtos.Refeicao;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
 using FortesAlimentacaoApi.Services;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 
 namespace FortesAlimentacaoApi.Util;
 
-public class Validacao
+public class AbrirAgenda
 {
     private FortesAlimentacaoDbContext _context;
     private IMapper _mapper;
 
-    public Validacao(FortesAlimentacaoDbContext context, IMapper mapper)
+    public AbrirAgenda(FortesAlimentacaoDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
@@ -33,12 +34,37 @@ public class Validacao
         
         if (diaSemana is DayOfWeek.Saturday
             && diaSemana is DayOfWeek.Sunday
-            && controleData.Atipico is false)
+            && controleData.Atipico is true)
         {
         }
     }
 
-    public void AbrirAgenda(IEnumerable<Equipe> equipes, IEnumerable<ControleData> datas)
+    public void ValidarDataAtualizacao(IEnumerable<AtualizarRefeicao> refeicoesAtualuzar)
+    {
+        IEnumerable<Refeicao> refeicoes = _mapper.Map<IEnumerable<Refeicao>>(refeicoesAtualuzar);
+
+        TimeOnly cafe = new (7,0,0);
+        TimeOnly almoco = new (12,0,0);
+        TimeOnly jantar = new (19,0,0);
+
+        foreach (Refeicao refeicao in refeicoes)
+        {
+            DayOfWeek diaSemana = refeicao.ControleData.DataRefeicao.DayOfWeek;
+
+            if (diaSemana is DayOfWeek.Saturday
+                && diaSemana is DayOfWeek.Sunday
+                && refeicao.ControleData.Atipico is true)
+            {
+                DateTime horaAtual = DateTime.Now;
+
+                DateTime cafeAtual = refeicao.ControleData.DataRefeicao.ToDateTime(new TimeOnly(horaAtual.Hour, horaAtual.Minute, horaAtual.Second));
+                DateTime almocoAtual = refeicao.ControleData.DataRefeicao.ToDateTime(almoco);
+                DateTime jantarAtual = refeicao.ControleData.DataRefeicao.ToDateTime(jantar);
+            }
+        }
+    }
+
+    public void AberturaDeAgenda(IEnumerable<Equipe> equipes, IEnumerable<ControleData> datas)
     {
         var data = DateTime.Today.DayOfWeek;
 
