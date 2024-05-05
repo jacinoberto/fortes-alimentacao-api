@@ -45,14 +45,14 @@ public class AbrirAgenda
 
         var data = DateTime.Today.DayOfWeek;
 
-        if (data is DayOfWeek.Sunday)
+        if (data is DayOfWeek.Thursday)
         {
             IEnumerable<ControleData> datasValidas = [];
 
             await Task.Run(() => 
             {
                 datasValidas = _context.ControleDatas
-                .Where(data => data.DataRefeicao > DateOnly.FromDateTime(DateTime.Today)
+                .Where(data => data.DataRefeicao > DateOnly.FromDateTime(DateTime.Today).AddDays(3)
                 && data.DataRefeicao < data.DataRefeicao.AddDays(7))
                 .ToList();
             });           
