@@ -23,18 +23,21 @@ public class AbrirAgenda
     {
         DateOnly dataDia = DateOnly.FromDateTime(DateTime.Today).AddDays(3);
 
-        for (int i = 1; i <= 7; i++)
+        if (DateTime.Today.DayOfWeek is DayOfWeek.Thursday)
         {
-            dataDia = dataDia.AddDays(1);
-
-            ControleData? controleData = await _context.ControleDatas
-                .FirstOrDefaultAsync(data => data.DataRefeicao == dataDia);
-
-            if (controleData is null)
+            for (int i = 1; i <= 7; i++)
             {
-                InserirControleData data = new(dataDia, null, false);
-                await _context.AddAsync(_mapper.Map<ControleData>(data));
-                await _context.SaveChangesAsync();
+                dataDia = dataDia.AddDays(1);
+
+                ControleData? controleData = await _context.ControleDatas
+                    .FirstOrDefaultAsync(data => data.DataRefeicao == dataDia);
+
+                if (controleData is null)
+                {
+                    InserirControleData data = new(dataDia, null, false);
+                    await _context.AddAsync(_mapper.Map<ControleData>(data));
+                    await _context.SaveChangesAsync();
+                }
             }
         }
     }
@@ -43,9 +46,7 @@ public class AbrirAgenda
     {
         await ConferirControleDatas(datas);
 
-        var data = DateTime.Today.DayOfWeek;
-
-        if (data is DayOfWeek.Thursday)
+        if (DateTime.Today.DayOfWeek is DayOfWeek.Thursday)
         {
             IEnumerable<ControleData> datasValidas = [];
 
