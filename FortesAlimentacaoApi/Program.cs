@@ -1,10 +1,13 @@
 using FortesAlimentacaoApi.Infra.Context;
 using FortesAlimentacaoApi.Services;
+using FortesAlimentacaoApi.Services.WorkSevice;
 using FortesAlimentacaoApi.Util;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
+builder.Services.AddSingleton<AberturaAgendaService>();
+builder.Services.AddHostedService<Work>();
 
 builder.Services.AddControllers();
 
