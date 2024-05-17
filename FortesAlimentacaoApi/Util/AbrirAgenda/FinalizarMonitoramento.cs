@@ -1,8 +1,7 @@
 ﻿using FortesAlimentacaoApi.Infra.Context;
-using FortesAlimentacaoApi.Services.WorkSevice;
 using Microsoft.EntityFrameworkCore;
 
-namespace FortesAlimentacaoApi.Util.AberturaAgenda;
+namespace FortesAlimentacaoApi.Util.AbrirAgenda;
 
 public class FinalizarMonitoramento
 {

@@ -1,20 +1,10 @@
 using FortesAlimentacaoApi.Infra.Context;
 using FortesAlimentacaoApi.Services;
-using FortesAlimentacaoApi.Services.WorkSevice;
 using FortesAlimentacaoApi.Util;
-using FortesAlimentacaoApi.Util.AberturaAgenda;
+using FortesAlimentacaoApi.Util.AbrirAgenda;
+using FortesAlimentacaoApi.Util.WorkSevice;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
-builder.Services.AddHostedService<Work>();
-builder.Services.AddSingleton<AberturaAgendaService>();
-builder.Services.AddSingleton<AberturaAgenda>();
-builder.Services.AddSingleton<ConferirControleData>();
-builder.Services.AddSingleton<RegistrarMonitoramento>();
-builder.Services.AddSingleton<FinalizarMonitoramento>();
-
-builder.Services.AddControllers();
 
 // Add cors
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
@@ -45,8 +35,15 @@ builder.Services.AddScoped<GestaoEquipeService>();
 builder.Services.AddScoped<EquipeService>();
 builder.Services.AddScoped<ControleDataService>();
 builder.Services.AddScoped<RefeicaoService>();
-builder.Services.AddScoped<AbrirAgend>();
 builder.Services.AddScoped<ValidarAtualizacao>();
+builder.Services.AddScoped<SelectService>();
+builder.Services.AddHostedService<Work>();
+builder.Services.AddSingleton<AberturaAgenda>();
+builder.Services.AddSingleton<ConferirControleData>();
+builder.Services.AddSingleton<RegistrarMonitoramento>();
+builder.Services.AddSingleton<FinalizarMonitoramento>();
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
 

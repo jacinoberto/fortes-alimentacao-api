@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FortesAlimentacaoApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/equipe")]
 public class EquipeController : ControllerBase
 {
     private readonly EquipeService _service;

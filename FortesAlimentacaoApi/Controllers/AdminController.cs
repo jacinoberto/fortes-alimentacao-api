@@ -1,12 +1,11 @@
 ﻿using FortesAlimentacaoApi.Database.Dtos.Admin;
-using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FortesAlimentacaoApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/admin")]
 public class AdminController : ControllerBase
 {
     private AdminService _service;

@@ -38,12 +38,6 @@ public class OperarioController : ControllerBase
         return Ok(await _service.RetornarTodos());
     }
 
-    [HttpGet("select")]
-    public async Task<IActionResult> RetornarSelect([FromQuery] string nome)
-    {
-        return Ok(await _service.RetornarSelect(nome));
-    }
-
     [HttpDelete]
     public async Task<IActionResult> Delete(Guid id)
     {

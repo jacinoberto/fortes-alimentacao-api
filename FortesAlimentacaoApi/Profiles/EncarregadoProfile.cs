@@ -23,7 +23,7 @@ public class EncarregadoProfile : Profile
             option => option.MapFrom(encarregado => encarregado.Gestor))
             .ReverseMap();
 
-        CreateMap<Encarregado, RetornoEncarregadoSelect>()
+        CreateMap<Encarregado, EncarregadoSelect>()
             .ForMember(encarregadoDto => encarregadoDto.Gestor,
             option => option.MapFrom(encarregado => encarregado.Gestor))
             .ReverseMap();

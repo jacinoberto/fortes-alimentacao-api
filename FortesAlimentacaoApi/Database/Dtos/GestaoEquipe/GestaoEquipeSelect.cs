@@ -4,7 +4,7 @@ using FortesAlimentacaoApi.Database.Dtos.Obra;
 
 namespace FortesAlimentacaoApi.Database.Dtos.GestaoEquipe;
 
-public record SelectGestaoEquipe
+public record GestaoEquipeSelect
 (
     Guid Id,
     RetornoEncarregadoGestaoSelect Encarregado,

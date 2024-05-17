@@ -17,7 +17,7 @@ public class GestaoEquipeProfile : Profile
             .ForMember(gestao => gestao.Encarregado,
             option => option.MapFrom(gestaoDeto => gestaoDeto.Encarregado));
 
-        CreateMap<GestaoEquipe, SelectGestaoEquipe>()
+        CreateMap<GestaoEquipe, GestaoEquipeSelect>()
             .ForMember(gestaoDto => gestaoDto.Obra,
             option => option.MapFrom(gestao => gestao.Obra))
             .ReverseMap()

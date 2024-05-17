@@ -1,6 +1,6 @@
 ﻿namespace FortesAlimentacaoApi.Database.Dtos.Operario;
 
-public record RetornarOperarioSelect(
+public record OperarioSelect(
     Guid Id,
     string Nome
 );

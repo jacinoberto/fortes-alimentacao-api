@@ -4,7 +4,7 @@ using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace FortesAlimentacaoApi.Util.AberturaAgenda;
+namespace FortesAlimentacaoApi.Util.AbrirAgenda;
 
 public class ConferirControleData
 {

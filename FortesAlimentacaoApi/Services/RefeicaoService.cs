@@ -2,7 +2,7 @@
 using FortesAlimentacaoApi.Database.Dtos.Refeicao;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
-using FortesAlimentacaoApi.Services.WorkSevice;
+using FortesAlimentacaoApi.Util.WorkSevice;
 using FortesAlimentacaoApi.Util;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
@@ -13,19 +13,13 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
-    private readonly AbrirAgend _validacao;
     private readonly ValidarAtualizacao _atualizacao;
 
-    private readonly AberturaAgendaService _aberturaAgendaService;
-
-    public RefeicaoService(FortesAlimentacaoDbContext context, IMapper mapper,
-        AbrirAgend validacao, ValidarAtualizacao atualizacao, AberturaAgendaService aberturaAgendaService)
+    public RefeicaoService(FortesAlimentacaoDbContext context, IMapper mapper, ValidarAtualizacao atualizacao)
     {
         _context = context;
         _mapper = mapper;
-        _validacao = validacao;
         _atualizacao = atualizacao;
-        _aberturaAgendaService = aberturaAgendaService;
     }
 
     public async Task<RetornarRefeicao> Inserir(InserirRefeicao entity)
@@ -69,17 +63,6 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
     public async Task<bool> Deletar(Guid id)
     {
         throw new NotImplementedException();
-    }
-
-    public async Task Agenda()
-    {
-        IEnumerable<Equipe> equipes = await _context.Equipes.Where(equipe => equipe.GestaoEquipe.Status == true).ToListAsync();
-        IEnumerable<ControleData> datas = await _context.ControleDatas.ToListAsync();
-
-        Task.Run(async () =>
-        {
-            await _aberturaAgendaService.Processar(equipes, datas);
-        });
     }
 
     public async Task<IEnumerable<RetornarRefeicao>> AtualizarRefeicoes(Collection<AtualizarRefeicao> refeicoesDto)

@@ -44,13 +44,6 @@ public class RefeicaoController : ControllerBase
         return Ok(await _service.RetornarTodosPorIdEncarregado(id));
     }
 
-    [HttpPost("agenda")]
-    public async Task<IActionResult> Agendar()
-    {
-        await _service.Agenda();
-        return Ok();
-    }
-
     [HttpPut]
     public async Task<IActionResult> AtualizarRefeicoes([FromBody] Collection<AtualizarRefeicao> refeicoesDto)
     {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/gestao-equipe")]
 public class GestaoEquipeController : ControllerBase
 {
     private readonly GestaoEquipeService _service;
@@ -42,11 +42,5 @@ public class GestaoEquipeController : ControllerBase
     {
         if (await _service.Deletar(id)) return NoContent();
         else return NotFound();
-    }
-
-    [HttpGet("select")]
-    public async Task<IActionResult> ReetornarSelectGestao()
-    {
-        return Ok(await _service.RetornarSelectGestao());
     }
 }

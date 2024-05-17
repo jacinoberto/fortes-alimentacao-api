@@ -3,8 +3,6 @@ using FortesAlimentacaoApi.Database.Dtos.Encarregado;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using System.Collections.ObjectModel;
 
 namespace FortesAlimentacaoApi.Services;
 
@@ -56,11 +54,5 @@ public class EncarregadoService : IGlobalService<InserirEncarregado, RetornarEnc
         else return false;
     }
 
-    public async Task<IEnumerable<RetornoEncarregadoSelect>> EncarregadoSelect(string nome)
-    {
-        return _mapper.Map<IEnumerable<RetornoEncarregadoSelect>>(await _context.Encarregados
-            .Where(encarregado => encarregado.Gestor.Nome.ToUpper().Contains(nome.ToUpper()))
-            .Where(encarregado => encarregado.Gestor.Status == true)
-            .ToListAsync());
-    }
+    
 }

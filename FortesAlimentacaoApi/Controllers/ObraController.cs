@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FortesAlimentacaoApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/obra")]
 public class ObraController : ControllerBase
 {
     private readonly ObraService _service;

@@ -1,8 +1,7 @@
 ﻿using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
-using FortesAlimentacaoApi.Services.WorkSevice;
 
-namespace FortesAlimentacaoApi.Util.AberturaAgenda;
+namespace FortesAlimentacaoApi.Util.AbrirAgenda;
 
 public class RegistrarMonitoramento
 {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FortesAlimentacaoApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/controle-data")]
 public class ControleDataController : ControllerBase
 {
     private readonly ControleDataService _service;
