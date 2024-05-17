@@ -1,4 +1,5 @@
 ﻿using FortesAlimentacaoApi.Database.Dtos.Equipe;
+using FortesAlimentacaoApi.Database.Dtos.Operario;
 using FortesAlimentacaoApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,13 +16,14 @@ public class EquipeController : ControllerBase
         _service = service;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Inserir([FromBody] InserirEquipe equipeDto)
+    [HttpPost("{idGestaoEquipe}")]
+    public async Task<IActionResult> Inserir([FromBody] IEnumerable<InserirOperario> operarios, Guid idGestaoEquipe)
     {
-        RetornarEquipe equipe = await _service.Inserir(equipeDto);
-        return CreatedAtAction(nameof(RetornarPorId),
-            new {id = equipe.Id},
-            equipe);
+        await _service.Inserir(operarios, idGestaoEquipe);
+        return Ok();
+
+       // if (_service.Inserir(operarios, idGestaoEquipe).IsCompleted) return Ok();
+       // else return BadRequest();
     }
 
     [HttpGet("{id}")]

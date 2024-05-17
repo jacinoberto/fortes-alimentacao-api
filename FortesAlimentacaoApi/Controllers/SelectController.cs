@@ -31,11 +31,6 @@ public class SelectController : ControllerBase
         return gestoes is not null ? Ok(gestoes) : NotFound();
     }
 
-    /// <summary>
-    /// Retorna todos os operarios que tiverem o nome copativel com o que for passado no parâmetro.
-    /// </summary>
-    /// <param name="nome"></param>
-    /// <returns>Uma lista de operarios.</returns>
     [HttpGet("operario")]
     public async Task<IActionResult> SelectOperarioAsync([FromQuery] string nome)
     {

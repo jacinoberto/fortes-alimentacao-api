@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using FortesAlimentacaoApi.Database.Dtos.Equipe;
+using FortesAlimentacaoApi.Database.Dtos.Operario;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Services;
@@ -10,11 +12,13 @@ public class EquipeService : IGlobalService<InserirEquipe, RetornarEquipe>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
+    private readonly OperarioService _operarioService;
 
-    public EquipeService(FortesAlimentacaoDbContext context, IMapper mapper)
+    public EquipeService(FortesAlimentacaoDbContext context, IMapper mapper, OperarioService operarioService)
     {
         _context = context;
         _mapper = mapper;
+        _operarioService = operarioService;
     }
 
 
@@ -52,5 +56,14 @@ public class EquipeService : IGlobalService<InserirEquipe, RetornarEquipe>
     public async Task<bool> Deletar(Guid id)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task Inserir(IEnumerable<InserirOperario> operariosDto,Guid idGestaoEquipe)
+    {
+        foreach (InserirOperario operarioDto in operariosDto)
+        {
+            var operario = await _operarioService.Inserir(operarioDto);
+            await Inserir(new InserirEquipe(idGestaoEquipe, operario.Id));
+        }
     }
 }
