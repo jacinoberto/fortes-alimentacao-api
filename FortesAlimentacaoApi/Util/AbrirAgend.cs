@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Util;
 
-public class AbrirAgenda
+public class AbrirAgend
 {
     private FortesAlimentacaoDbContext _context;
     private IMapper _mapper;
 
 
-    public AbrirAgenda(FortesAlimentacaoDbContext context, IMapper mapper)
+    public AbrirAgend(FortesAlimentacaoDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;

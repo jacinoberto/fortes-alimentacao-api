@@ -70,7 +70,7 @@ public class AberturaAgendaService
         {
             await Persistir();
 
-            var abrirAgenda = scope.ServiceProvider.GetRequiredService<AbrirAgenda>();
+            var abrirAgenda = scope.ServiceProvider.GetRequiredService<AbrirAgend>();
 
             // Exemplo de como usar o DbContext para manipular dados
             await abrirAgenda.AberturaDeAgenda(equipes, datas);

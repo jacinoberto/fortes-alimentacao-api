@@ -13,13 +13,13 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
-    private readonly AbrirAgenda _validacao;
+    private readonly AbrirAgend _validacao;
     private readonly ValidarAtualizacao _atualizacao;
 
     private readonly AberturaAgendaService _aberturaAgendaService;
 
     public RefeicaoService(FortesAlimentacaoDbContext context, IMapper mapper,
-        AbrirAgenda validacao, ValidarAtualizacao atualizacao, AberturaAgendaService aberturaAgendaService)
+        AbrirAgend validacao, ValidarAtualizacao atualizacao, AberturaAgendaService aberturaAgendaService)
     {
         _context = context;
         _mapper = mapper;

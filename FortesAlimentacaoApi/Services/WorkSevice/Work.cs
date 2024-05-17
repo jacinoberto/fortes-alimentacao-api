@@ -1,37 +1,53 @@
-﻿
+﻿using FortesAlimentacaoApi.Util;
+using FortesAlimentacaoApi.Util.AberturaAgenda;
+
 namespace FortesAlimentacaoApi.Services.WorkSevice;
 
-public class Work : IHostedService
+public class Work : BackgroundService
 {
-    private Timer _timer;
-
     private ILogger<Work> _logger;
-    private readonly AberturaAgendaService _agendaService;
+    //private readonly AberturaAgendaService _agendaService;
+    private readonly AberturaAgenda _abrirAgenda;
+    private readonly ConferirControleData _conferirControleData;
+    private readonly RegistrarMonitoramento _registrarMonitoramento;
+    private readonly FinalizarMonitoramento _finalizarMonitoramento;
 
-    public Work(ILogger<Work> logger, AberturaAgendaService agendaService)
+    public Work(ILogger<Work> logger, /*AberturaAgendaService agendaService,*/ AberturaAgenda abrirAgenda,
+        ConferirControleData conferirControleData, RegistrarMonitoramento registrarMonitoramento,
+        FinalizarMonitoramento finalizarMonitoramento)
     {
         _logger = logger;
-        _agendaService = agendaService;
+        //_agendaService = agendaService;
+        _abrirAgenda = abrirAgenda;
+        _conferirControleData = conferirControleData;
+        _registrarMonitoramento = registrarMonitoramento;
+        _finalizarMonitoramento = finalizarMonitoramento;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("A abertura da agenda foi iniciada!");
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            _logger.LogInformation("Data e Hora não permitem a abertura da agenda.");
 
-        _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+            var horaAgora = DateTime.Now;
+            DayOfWeek dataHoje = horaAgora.DayOfWeek;
+            var horario = new TimeSpan(8,7, 0);
+            TimeSpan ff = horaAgora.TimeOfDay;
 
-        return Task.CompletedTask;
-    }
+            if (dataHoje == DayOfWeek.Friday
+                && ff.Hours == horario.Hours
+                && ff.Minutes == horario.Minutes
+                && ff.Seconds == horario.Seconds)
+            {
+                await _registrarMonitoramento.Registrar();
+                await _conferirControleData.ConferirControleDatas();
+                await _abrirAgenda.AbrirAgenda();
+                await _finalizarMonitoramento.Finalizar();
+                Console.WriteLine("Foi");
+            }
 
-    public void DoWork(object? state)
-    {
-        Console.WriteLine($"{DateTime.UtcNow} => {_agendaService.PegarMensagem()}");
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        _logger.LogInformation("A abertura da agenda foi finalizada!");
-
-        return Task.CompletedTask;
+            await Task.Delay(1000, stoppingToken);
+        }
     }
 }

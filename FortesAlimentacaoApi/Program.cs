@@ -2,12 +2,17 @@ using FortesAlimentacaoApi.Infra.Context;
 using FortesAlimentacaoApi.Services;
 using FortesAlimentacaoApi.Services.WorkSevice;
 using FortesAlimentacaoApi.Util;
+using FortesAlimentacaoApi.Util.AberturaAgenda;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddSingleton<AberturaAgendaService>();
 builder.Services.AddHostedService<Work>();
+builder.Services.AddSingleton<AberturaAgendaService>();
+builder.Services.AddSingleton<AberturaAgenda>();
+builder.Services.AddSingleton<ConferirControleData>();
+builder.Services.AddSingleton<RegistrarMonitoramento>();
+builder.Services.AddSingleton<FinalizarMonitoramento>();
 
 builder.Services.AddControllers();
 
@@ -40,7 +45,7 @@ builder.Services.AddScoped<GestaoEquipeService>();
 builder.Services.AddScoped<EquipeService>();
 builder.Services.AddScoped<ControleDataService>();
 builder.Services.AddScoped<RefeicaoService>();
-builder.Services.AddScoped<AbrirAgenda>();
+builder.Services.AddScoped<AbrirAgend>();
 builder.Services.AddScoped<ValidarAtualizacao>();
 
 var app = builder.Build();
