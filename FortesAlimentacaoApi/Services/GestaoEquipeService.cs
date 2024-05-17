@@ -58,4 +58,13 @@ public class GestaoEquipeService : IGlobalService<InserirGestaoEquipe, RetornarG
         }
         else return false;
     }
+
+    public async Task<IEnumerable<SelectGestaoEquipe>> RetornarSelectGestao()
+    {
+        return _mapper.Map<IEnumerable<SelectGestaoEquipe>>(await _context.GestaoEquipes
+            .Where(gestao => gestao.Status == true)
+            .Include(gestao => gestao.Obra)
+            .Include(gestao => gestao.Encarregado)
+            .ToListAsync());
+    }
 }

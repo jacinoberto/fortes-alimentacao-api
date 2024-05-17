@@ -43,4 +43,10 @@ public class GestaoEquipeController : ControllerBase
         if (await _service.Deletar(id)) return NoContent();
         else return NotFound();
     }
+
+    [HttpGet("select")]
+    public async Task<IActionResult> ReetornarSelectGestao()
+    {
+        return Ok(await _service.RetornarSelectGestao());
+    }
 }
