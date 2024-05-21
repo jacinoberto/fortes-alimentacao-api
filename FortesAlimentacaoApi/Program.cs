@@ -1,9 +1,9 @@
 using FortesAlimentacaoApi.Infra.Context;
 using FortesAlimentacaoApi.Services;
-using FortesAlimentacaoApi.Util;
 using FortesAlimentacaoApi.Util.AbrirAgenda;
 using FortesAlimentacaoApi.Util.Filtro;
 using FortesAlimentacaoApi.Util.Validacao;
+using FortesAlimentacaoApi.Util.Validacao.ConferirRefeicao;
 using FortesAlimentacaoApi.Util.WorkSevice;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,12 +37,14 @@ builder.Services.AddScoped<GestaoEquipeService>();
 builder.Services.AddScoped<EquipeService>();
 builder.Services.AddScoped<ControleDataService>();
 builder.Services.AddScoped<RefeicaoService>();
-builder.Services.AddScoped<ValidarAtualizacao>();
 builder.Services.AddScoped<SelectService>();
 builder.Services.AddSingleton<IFiltrarDia, FiltrarDiaAtipico>();
 builder.Services.AddSingleton<IFiltrarDia, FiltrarDiaNaoAtipico>();
 builder.Services.AddSingleton<IValidarDia, ValidarDiaAtipico>();
 builder.Services.AddSingleton<IValidarDia, ValidarDiaNaoAtipico>();
+builder.Services.AddSingleton<IConferirRefeicao, Cafe>();
+builder.Services.AddSingleton<IConferirRefeicao, Almoco>();
+builder.Services.AddSingleton<IConferirRefeicao, Jantar>();
 builder.Services.AddSingleton<RefeicaoPermitida>();
 builder.Services.AddScoped<AtualizarRefeicoes>();
 builder.Services.AddHostedService<Work>();

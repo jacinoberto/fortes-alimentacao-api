@@ -1,23 +1,29 @@
 ﻿using FortesAlimentacaoApi.Database.Dtos.Refeicao;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Util.Filtro;
+using FortesAlimentacaoApi.Util.Validacao.ConferirRefeicao;
 
 namespace FortesAlimentacaoApi.Util.Validacao;
 
 public class ValidarDiaNaoAtipico : IValidarDia
 {
     private readonly IFiltrarDia _filtro;
+    private readonly IEnumerable<IConferirRefeicao> _refeicoes;
 
-    public ValidarDiaNaoAtipico(IFiltrarDia filtro)
+    public ValidarDiaNaoAtipico(IFiltrarDia filtro, IEnumerable<IConferirRefeicao> refeicoes)
     {
         _filtro = filtro;
+        _refeicoes = refeicoes;
     }
 
     public async Task<Refeicao> Validar(AtualizarRefeicao atualizarRefeicao)
     {
-        TimeOnly cafe = new(7, 0, 0);
-        TimeOnly almoco = new(12, 0, 0);
-        TimeOnly jantar = new(19, 0, 0);
+        IEnumerable<TimeOnly> horarios =
+        [
+            new(7, 0, 0),
+            new(12, 0, 0),
+            new(19, 0, 0),
+        ];
 
         RefeicaoFiltro? filtro = await _filtro.Filtrar(atualizarRefeicao);
 
@@ -26,42 +32,13 @@ public class ValidarDiaNaoAtipico : IValidarDia
             Refeicao refeicao = filtro.Refeicao;
             AtualizarRefeicao refeicaoDto = filtro.AtualizarRefeicao;
 
-            DateTime dataHoraAtual = DateTime.Now;
-            DateTime dataHoraRefeicao = new DateTime();
             TimeSpan diferenca = new TimeSpan(2, 0, 0, 0);
-            TimeSpan tempo = new TimeSpan();
 
-            if (refeicao.Cafe != refeicaoDto.Cafe)
+            foreach (var iRefeicao in _refeicoes)
             {
-                dataHoraRefeicao = refeicao.ControleData.DataRefeicao.ToDateTime(cafe);
-                tempo = dataHoraRefeicao - dataHoraAtual;
-
-                Console.WriteLine(tempo);
-                if (tempo >= diferenca)
+                foreach (var horario in horarios)
                 {
-                    refeicao.Cafe = refeicaoDto.Cafe;
-                }
-            }
-
-            if (refeicao.Almoco != refeicaoDto.Almoco)
-            {
-                dataHoraRefeicao = refeicao.ControleData.DataRefeicao.ToDateTime(almoco);
-                tempo = dataHoraRefeicao - dataHoraAtual;
-
-                Console.WriteLine(tempo);
-                if (tempo >= diferenca)
-                {
-                    refeicao.Almoco = refeicaoDto.Almoco;
-                }
-            }
-
-            if (refeicao.Jantar != refeicaoDto.Jantar)
-            {
-                dataHoraRefeicao = refeicao.ControleData.DataRefeicao.ToDateTime(jantar);
-                tempo = dataHoraRefeicao - dataHoraAtual;
-                if (tempo >= diferenca)
-                {
-                    refeicao.Jantar = refeicaoDto.Jantar;
+                    iRefeicao.Conferir(refeicao, refeicaoDto, horario, diferenca);
                 }
             }
 
