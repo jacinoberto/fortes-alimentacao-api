@@ -6,6 +6,7 @@ using FortesAlimentacaoApi.Util.WorkSevice;
 using FortesAlimentacaoApi.Util;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using FortesAlimentacaoApi.Util.Validacao;
 
 namespace FortesAlimentacaoApi.Services;
 
@@ -13,13 +14,16 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
-    private readonly ValidarAtualizacao _atualizacao;
+    private readonly RefeicaoPermitida _refeicao;
+    private readonly AtualizarRefeicoes _atualizacao;
 
-    public RefeicaoService(FortesAlimentacaoDbContext context, IMapper mapper, ValidarAtualizacao atualizacao)
+    public RefeicaoService(FortesAlimentacaoDbContext context, IMapper mapper,RefeicaoPermitida refeicao,
+        AtualizarRefeicoes at)
     {
         _context = context;
         _mapper = mapper;
-        _atualizacao = atualizacao;
+        _refeicao = refeicao;
+        _atualizacao = at;
     }
 
     public async Task<RetornarRefeicao> Inserir(InserirRefeicao entity)
@@ -71,7 +75,7 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
 
         foreach (AtualizarRefeicao refeicaoDto in refeicoesDto)
         {
-            Refeicao refeicao = _atualizacao.RefeicoesPermitidasAtualizacoes(refeicaoDto);
+            Refeicao refeicao = await _refeicao.RefeicoesPermitidasAtualizacoes(refeicaoDto);
 
             if (refeicao is not null)
             {

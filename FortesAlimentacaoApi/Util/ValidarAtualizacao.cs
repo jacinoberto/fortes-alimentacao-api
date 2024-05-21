@@ -20,13 +20,13 @@ public class ValidarAtualizacao
 
     public RefeicaoFiltro? FiltrarDiasAtipicos(AtualizarRefeicao refeicaoDto)
     {
-        Refeicao? refeicao = _mapper.Map<Refeicao>(_context.Refeicoes
+        Refeicao? refeicao = _context.Refeicoes
             .Include(refeicao => refeicao.ControleData)
-            .FirstOrDefault(refeicao => refeicao.Id == refeicaoDto.Id));
+            .FirstOrDefault(refeicao => refeicao.Id == refeicaoDto.Id);
 
-        if(refeicao != null)
+        DayOfWeek diaSemana = refeicao.ControleData.DataRefeicao.DayOfWeek;
+        if (refeicao != null)
         {
-            DayOfWeek diaSemana = refeicao.ControleData.DataRefeicao.DayOfWeek;
 
             if (diaSemana is DayOfWeek.Saturday
                 || diaSemana is DayOfWeek.Sunday
@@ -44,12 +44,15 @@ public class ValidarAtualizacao
         Refeicao? refeicao = _context.Refeicoes.FirstOrDefault(refeicao => refeicao.Id == refeicaoDto.Id);
 
         DayOfWeek diaSemana = refeicao.ControleData.DataRefeicao.DayOfWeek;
-
+        if (refeicao is not null)
+        {
         if (diaSemana is not DayOfWeek.Saturday
             || diaSemana is not DayOfWeek.Sunday
             || refeicao.ControleData.Atipico is false)
         {
             return new RefeicaoFiltro(refeicao, refeicaoDto);
+        }
+
         }
 
         return null;
