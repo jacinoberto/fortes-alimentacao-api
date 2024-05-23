@@ -29,10 +29,6 @@ public class EquipeController : ControllerBase
         {
             return BadRequest("Algo inesperado aconteceu.");
         }
-        
-
-       // if (_service.Inserir(operarios, idGestaoEquipe).IsCompleted) return Ok();
-       // else return BadRequest();
     }
 
     [HttpGet("{id}")]
