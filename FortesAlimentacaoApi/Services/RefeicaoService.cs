@@ -7,6 +7,7 @@ using FortesAlimentacaoApi.Util;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using FortesAlimentacaoApi.Util.Validacao;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FortesAlimentacaoApi.Services;
 
@@ -57,7 +58,9 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
     public async Task<IEnumerable<RetornarRefeicao>> RetornarTodosPorIdEncarregado(Guid id)
     {
         return _mapper.Map<IEnumerable<RetornarRefeicao>>(await _context.Refeicoes
-            .Where(refeicao => refeicao.Equipe.GestaoEquipe.EncarregadoId == id)
+            .Where(refeicao => refeicao.Equipe.GestaoEquipe.EncarregadoId == id
+            && refeicao.ControleData.DataRefeicao > DateOnly.FromDateTime(DateTime.Today)
+            && refeicao.ControleData.DataRefeicao < refeicao.ControleData.DataRefeicao.AddDays(7))
             .Include(refeicao => refeicao.Equipe)
             .Include(refeicao => refeicao.Equipe.Operario)
             .Include(refeicao => refeicao.ControleData)

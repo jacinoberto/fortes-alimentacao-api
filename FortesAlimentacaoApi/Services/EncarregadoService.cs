@@ -3,6 +3,7 @@ using FortesAlimentacaoApi.Database.Dtos.Encarregado;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FortesAlimentacaoApi.Services;
 
@@ -54,5 +55,12 @@ public class EncarregadoService : IGlobalService<InserirEncarregado, RetornarEnc
         else return false;
     }
 
-    
+    public async Task<RetornoEncarregadoLogin>? Login(EncarregadoLogin login)
+    {
+        Encarregado encarregado = await _context.Encarregados
+            .FirstAsync(encarregado => login.Email == encarregado.Gestor.Email
+            && login.Senha == encarregado.Gestor.Senha);
+
+        return encarregado is not null ? _mapper.Map<RetornoEncarregadoLogin>(encarregado) : null;
+    }    
 }

@@ -17,5 +17,10 @@ public class AdminProfile : Profile
             .ForMember(adminDto => adminDto.Gestor,
             option => option.MapFrom(admin => admin.Gestor))
             .ReverseMap();
+
+        CreateMap<Admin, RetornoAdminLogin>()
+            .ForMember(adminDto => adminDto.Gestor,
+            option => option.MapFrom(admin => admin.Gestor))
+            .ReverseMap();
     }
 }
