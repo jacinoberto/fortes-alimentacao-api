@@ -38,10 +38,10 @@ public class RefeicaoController : ControllerBase
         return Ok(await _service.RetornarTodos());
     }
 
-    [HttpGet("equipe/{id}")]
-    public async Task<IActionResult> RetornarTodosPorIdEncarregado(Guid id)
+    [HttpGet("equipe")]
+    public async Task<IActionResult> RetornarTodosPorIdEncarregado([FromQuery] Guid idEncarregado, [FromQuery] DateOnly data)
     {
-        return Ok(await _service.RetornarTodosPorIdEncarregado(id));
+        return Ok(await _service.RetornarTodosPorIdEncarregado(idEncarregado, data));
     }
 
     [HttpPut]

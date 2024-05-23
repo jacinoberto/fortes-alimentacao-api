@@ -19,8 +19,17 @@ public class EquipeController : ControllerBase
     [HttpPost("{idGestaoEquipe}")]
     public async Task<IActionResult> Inserir([FromBody] IEnumerable<InserirOperario> operarios, Guid idGestaoEquipe)
     {
-        await _service.Inserir(operarios, idGestaoEquipe);
-        return Ok();
+        try
+        {
+            await _service.Inserir(operarios, idGestaoEquipe);
+            return Ok("Operario cadastrado e vinculado a equipe com sucesso.");
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Algo inesperado aconteceu.");
+        }
+        
 
        // if (_service.Inserir(operarios, idGestaoEquipe).IsCompleted) return Ok();
        // else return BadRequest();
