@@ -31,7 +31,7 @@ public class EquipeService : IGlobalService<InserirEquipe, RetornarEquipe>
         return _mapper.Map<RetornarEquipe>(equipe);
     }
 
-    public async Task<RetornarEquipe> RetornarPorId(Guid id)
+    public async Task<RetornarEquipe> RetornarPorId(Guid idGestaoEquipe)
     {
         return _mapper.Map<RetornarEquipe>(await _context.Equipes
             .Where(equipe => equipe.GestaoEquipe.Status == true)
@@ -39,7 +39,19 @@ public class EquipeService : IGlobalService<InserirEquipe, RetornarEquipe>
             .Include(equipe => equipe.GestaoEquipe.Obra)
             .Include(equipe => equipe.GestaoEquipe.Encarregado)
             .Include(equipe => equipe.Operario)
-            .FirstOrDefaultAsync(equipe => equipe.Id == id));
+            .FirstOrDefaultAsync(equipe => equipe.GestaoEquipeId == idGestaoEquipe));
+    }
+
+    public async Task<IEnumerable<RetornarEquipe>> RetornarPorIdGestaoEquipe(Guid idGestaoEquipe)
+    {
+        return _mapper.Map<IEnumerable<RetornarEquipe>>(await _context.Equipes
+            .Where(equipe => equipe.GestaoEquipe.Status == true
+            && equipe.GestaoEquipeId == idGestaoEquipe)
+            .Include(equipe => equipe.GestaoEquipe)
+            .Include(equipe => equipe.GestaoEquipe.Obra)
+            .Include(equipe => equipe.GestaoEquipe.Encarregado)
+            .Include(equipe => equipe.Operario)
+            .ToListAsync());
     }
 
     public async Task<IEnumerable<RetornarEquipe>> RetornarTodos()

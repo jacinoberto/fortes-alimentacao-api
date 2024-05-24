@@ -1,5 +1,4 @@
-﻿using FortesAlimentacaoApi.Database.Dtos.Equipe;
-using FortesAlimentacaoApi.Database.Dtos.Operario;
+﻿using FortesAlimentacaoApi.Database.Dtos.Operario;
 using FortesAlimentacaoApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,10 +30,10 @@ public class EquipeController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> RetornarPorId(Guid id)
+    [HttpGet("{idGestaoEquipe}")]
+    public async Task<IActionResult> RetornarPorId(Guid idGestaoEquipe)
     {
-        if (await _service.RetornarPorId(id) is not null) return Ok(await _service.RetornarPorId(id));
+        if (await _service.RetornarPorIdGestaoEquipe(idGestaoEquipe) is not null) return Ok(await _service.RetornarPorIdGestaoEquipe(idGestaoEquipe));
         else return NotFound();
     }
 
