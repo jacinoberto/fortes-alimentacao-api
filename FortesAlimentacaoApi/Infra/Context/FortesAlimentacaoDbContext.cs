@@ -16,6 +16,7 @@ public class FortesAlimentacaoDbContext : DbContext
     public DbSet<ControleData> ControleDatas { get; set; }
     public DbSet<Refeicao> Refeicoes { get; set; }
     public DbSet<MonitorarAgenda> MonitorarAgendas { get; set; }
+    public DbSet<DataObra> DataObras { get; set; }
 
     public FortesAlimentacaoDbContext(IConfiguration configuration, DbContextOptions options)
         : base(options)

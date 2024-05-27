@@ -1,6 +1,7 @@
 using FortesAlimentacaoApi.Infra.Context;
 using FortesAlimentacaoApi.Services;
 using FortesAlimentacaoApi.Util.AbrirAgenda;
+using FortesAlimentacaoApi.Util.DataObra;
 using FortesAlimentacaoApi.Util.Filtro;
 using FortesAlimentacaoApi.Util.Validacao;
 using FortesAlimentacaoApi.Util.Validacao.ConferirRefeicao;
@@ -38,6 +39,9 @@ builder.Services.AddScoped<EquipeService>();
 builder.Services.AddScoped<ControleDataService>();
 builder.Services.AddScoped<RefeicaoService>();
 builder.Services.AddScoped<SelectService>();
+builder.Services.AddScoped<ObraSelecionada>();
+builder.Services.AddScoped<TodasObras>();
+builder.Services.AddScoped<DataObraService>();
 builder.Services.AddSingleton<IFiltrarDia, FiltrarDiaAtipico>();
 builder.Services.AddSingleton<IFiltrarDia, FiltrarDiaNaoAtipico>();
 builder.Services.AddSingleton<IValidarDia, ValidarDiaAtipico>();

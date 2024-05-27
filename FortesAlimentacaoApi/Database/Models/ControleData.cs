@@ -22,5 +22,6 @@ public class ControleData
 
     // Relacionamento
     public ICollection<Refeicao> Refeicoes { get; set; }
+    public ICollection<DataObra> DataObras { get; set; }
 
 }

@@ -27,4 +27,5 @@ public class Obra
     // Relacionamentos
     public Endereco Endereco { get; set; }
     public ICollection<GestaoEquipe>? GestaoEquipes { get; set; }
+    public ICollection<DataObra> DataObras { get; set; }
 }
