@@ -27,12 +27,12 @@ public class AberturaAgenda
 
             _logger.LogInformation("A abertura da agenda foi inicada.");
 
-            if (DateTime.Today.DayOfWeek is DayOfWeek.Monday)
+            if (DateTime.Today.DayOfWeek is DayOfWeek.Tuesday)
             {
                 _logger.LogInformation("A abertura da agenda foi permitida.");
 
                 IEnumerable<Database.Models.DataObra> datasValidas = await _context.DataObras
-                .Where(data => data.ControleData.DataRefeicao > DateOnly.FromDateTime(DateTime.Today).AddDays(6)
+                .Where(data => data.ControleData.DataRefeicao > DateOnly.FromDateTime(DateTime.Today).AddDays(5)
                 && data.ControleData.DataRefeicao < data.ControleData.DataRefeicao.AddDays(7))
                 .Include(data => data.Obra)
                 .ToListAsync();

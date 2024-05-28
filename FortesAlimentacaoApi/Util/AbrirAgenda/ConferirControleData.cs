@@ -32,9 +32,9 @@ public class ConferirControleData
 
             _logger.LogInformation("A conferência de datas foi iniciada.");
 
-            DateOnly dataDia = DateOnly.FromDateTime(DateTime.Today).AddDays(6);
+            DateOnly dataDia = DateOnly.FromDateTime(DateTime.Today).AddDays(5);
 
-            if (DateTime.Today.DayOfWeek is DayOfWeek.Monday)
+            if (DateTime.Today.DayOfWeek is DayOfWeek.Tuesday)
             {
                 _logger.LogInformation("O cadastro das datas foi permitido.");
 
@@ -53,6 +53,32 @@ public class ConferirControleData
                         await _context.SaveChangesAsync();
 
                         await _todasObras.Inserir(controle.Id);
+                    }
+
+                    ICollection<ObraSelect> obrasSelect = [];
+
+                    if (controleData is not null
+                        && controleData.Atipico is true)
+                    {
+                        InserirControleData data = new(dataDia, null, false);
+                        ControleData controle = _mapper.Map<ControleData>(data);
+                        await _context.AddAsync(controle);
+                        await _context.SaveChangesAsync();
+
+                        ICollection<Database.Models.DataObra> dataObras = _context.DataObras
+                            .Where(data => data.ControleData.DataRefeicao == controle.DataRefeicao).ToList();
+
+                        ICollection<Obra> obras = _context.Obras.ToList();
+                        
+                        foreach (var obra in obras)
+                        {
+                            foreach (var dataObra in dataObras)
+                            {
+                                if (dataObra.Obra.Id != obra.Id) obrasSelect.Add(new ObraSelect(obra.Id));
+                            }
+                        }
+
+                        await _obrasSelecionadas.Inserir(obrasSelect, controle.Id);
                     }
                 }
 
