@@ -16,5 +16,12 @@ public class DataObraProfile : Profile
             .ReverseMap()
             .ForMember(data => data.ControleData,
             option => option.MapFrom(data => data.ControleData));
+
+        CreateMap<DataObra, RetornoDataObraRefeicao>()
+            .ForMember(dataDto => dataDto.Obra,
+            option => option.MapFrom(data => data.Obra))
+            .ReverseMap()
+            .ForMember(data => data.ControleData,
+            option => option.MapFrom(data => data.ControleData));
     }
 }

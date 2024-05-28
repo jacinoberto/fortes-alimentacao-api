@@ -24,11 +24,11 @@ public class Refeicao
     [Column("jantar")]
     public bool Jantar { get; set; } = true;
 
-    [Column("controle_data_id")]
-    [ForeignKey(nameof(ControleData))]
-    public Guid ControleDataId { get; set; }
+    [Column("data_obra_id")]
+    [ForeignKey(nameof(DataObra))]
+    public Guid DataObraId { get; set; }
 
     // Relacionamentos
     public Equipe Equipe { get; set; }
-    public ControleData ControleData { get; set; }
+    public DataObra DataObra { get; set; }
 }

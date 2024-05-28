@@ -29,10 +29,10 @@ public class Work : BackgroundService
 
             var horaAgora = DateTime.Now;
             DayOfWeek dataHoje = horaAgora.DayOfWeek;
-            var horario = new TimeSpan(8, 7, 0);
+            var horario = new TimeSpan(23, 01, 0);
             TimeSpan ff = horaAgora.TimeOfDay;
 
-            if (dataHoje == DayOfWeek.Friday
+            if (dataHoje == DayOfWeek.Monday
                 && ff.Hours == horario.Hours
                 && ff.Minutes == horario.Minutes
                 && ff.Seconds == horario.Seconds)

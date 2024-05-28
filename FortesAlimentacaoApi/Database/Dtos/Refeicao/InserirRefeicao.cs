@@ -2,5 +2,5 @@
 
 public record InserirRefeicao(
     Guid EquipeId,
-    Guid ControleDataId
+    Guid DataObraId
 );

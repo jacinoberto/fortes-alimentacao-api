@@ -21,7 +21,6 @@ public class ControleData
     public  bool Atipico { get; set; }
 
     // Relacionamento
-    public ICollection<Refeicao> Refeicoes { get; set; }
     public ICollection<DataObra> DataObras { get; set; }
 
 }

@@ -42,7 +42,7 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
             await _context.Refeicoes
             .Include(refeicao => refeicao.Equipe)
             .Include(refeicao => refeicao.Equipe.Operario)
-            .Include(refeicao => refeicao.ControleData)
+            .Include(refeicao => refeicao.DataObra)
             .FirstOrDefaultAsync(refeicao => refeicao.Id == id));
     }
 
@@ -51,7 +51,9 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
         return _mapper.Map<IEnumerable<RetornarRefeicao>>(await _context.Refeicoes
             .Include(refeicao => refeicao.Equipe)
             .Include(refeicao => refeicao.Equipe.Operario)
-            .Include(refeicao => refeicao.ControleData)
+            .Include(refeicao => refeicao.DataObra)
+            .Include(refeicao => refeicao.DataObra.Obra)
+            .Include(refeicao => refeicao.DataObra.ControleData)
             .ToListAsync());
     }
 
@@ -59,10 +61,11 @@ public class RefeicaoService : IGlobalService<InserirRefeicao, RetornarRefeicao>
     {
         return _mapper.Map<IEnumerable<RetornarRefeicao>>(await _context.Refeicoes
             .Where(refeicao => refeicao.Equipe.GestaoEquipe.EncarregadoId == id
-            && refeicao.ControleData.DataRefeicao == data)
+            && refeicao.DataObra.ControleData.DataRefeicao == data)
             .Include(refeicao => refeicao.Equipe)
             .Include(refeicao => refeicao.Equipe.Operario)
-            .Include(refeicao => refeicao.ControleData)
+            .Include(refeicao => refeicao.DataObra.Obra)
+            .Include(refeicao => refeicao.DataObra.ControleData)
             .ToListAsync());
     }
 

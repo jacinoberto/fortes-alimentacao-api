@@ -1,4 +1,5 @@
 ﻿using FortesAlimentacaoApi.Database.Dtos.ControleData;
+using FortesAlimentacaoApi.Database.Dtos.DataObra;
 using FortesAlimentacaoApi.Database.Dtos.Equipe;
 using FortesAlimentacaoApi.Database.Dtos.Operario;
 
@@ -10,5 +11,5 @@ public record RetornarRefeicao(
     bool Cafe,
     bool Almoco,
     bool Jantar,
-    RetornoControleDataRefeicao ControleData
+    RetornoDataObraRefeicao DataObra
 );

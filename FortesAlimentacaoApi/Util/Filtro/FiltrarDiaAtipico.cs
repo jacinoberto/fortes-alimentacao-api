@@ -24,16 +24,16 @@ public class FiltrarDiaAtipico : IFiltrarDia
             var _context = scope.ServiceProvider.GetRequiredService<FortesAlimentacaoDbContext>();
 
             Refeicao? refeicao = _context.Refeicoes
-                .Include(refeicao => refeicao.ControleData)
+                .Include(refeicao => refeicao.DataObra.ControleData)
                 .FirstOrDefault(refeicao => refeicao.Id == refeicaoDto.Id);
            
             if (refeicao != null)
             {
-                DayOfWeek diaSemana = refeicao.ControleData.DataRefeicao.DayOfWeek;
+                DayOfWeek diaSemana = refeicao.DataObra.ControleData.DataRefeicao.DayOfWeek;
 
                 if (diaSemana is DayOfWeek.Saturday
                     || diaSemana is DayOfWeek.Sunday
-                    || refeicao.ControleData.Atipico is true)
+                    || refeicao.DataObra.ControleData.Atipico is true)
                 {
                     return new RefeicaoFiltro(refeicao, refeicaoDto);
                 }

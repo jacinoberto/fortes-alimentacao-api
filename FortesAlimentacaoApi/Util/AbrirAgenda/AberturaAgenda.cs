@@ -27,29 +27,33 @@ public class AberturaAgenda
 
             _logger.LogInformation("A abertura da agenda foi inicada.");
 
-            if (DateTime.Today.DayOfWeek is DayOfWeek.Thursday)
+            if (DateTime.Today.DayOfWeek is DayOfWeek.Monday)
             {
                 _logger.LogInformation("A abertura da agenda foi permitida.");
 
-                IEnumerable<ControleData> datasValidas = await _context.ControleDatas
-                .Where(data => data.DataRefeicao > DateOnly.FromDateTime(DateTime.Today).AddDays(3)
-                && data.DataRefeicao < data.DataRefeicao.AddDays(7))
+                IEnumerable<Database.Models.DataObra> datasValidas = await _context.DataObras
+                .Where(data => data.ControleData.DataRefeicao > DateOnly.FromDateTime(DateTime.Today).AddDays(6)
+                && data.ControleData.DataRefeicao < data.ControleData.DataRefeicao.AddDays(7))
+                .Include(data => data.Obra)
                 .ToListAsync();
 
-                IEnumerable<Equipe> equipes = await _context.Equipes.ToListAsync();
+                IEnumerable<Equipe> equipes = await _context.Equipes.Include(equipe => equipe.GestaoEquipe.Obra).ToListAsync();
 
-                foreach (ControleData controleData in datasValidas)
+                foreach (Database.Models.DataObra dataObra in datasValidas)
                 {
                     foreach (Equipe equipe in equipes)
                     {
+                        if (dataObra.Obra == equipe.GestaoEquipe.Obra)
+                        {
+                            InserirRefeicao refeicaoDto = new InserirRefeicao(
+                                equipe.Id,
+                                dataObra.Id
+                            );
 
-                        InserirRefeicao refeicaoDto = new InserirRefeicao(
-                        equipe.Id,
-                            controleData.Id
-                        );
+                            await _context.Refeicoes.AddAsync(_mapper.Map<Refeicao>(refeicaoDto));
+                            await _context.SaveChangesAsync();
+                        }
 
-                        await _context.Refeicoes.AddAsync(_mapper.Map<Refeicao>(refeicaoDto));
-                        await _context.SaveChangesAsync();
                     }
                 }
             }

@@ -14,7 +14,7 @@ public class RefeicaoProfile : Profile
             .ForMember(refeicaoDto => refeicaoDto.Equipe,
             option => option.MapFrom(refeicao => refeicao.Equipe))
             .ReverseMap()
-            .ForMember(refeicao => refeicao.ControleData,
-            option => option.MapFrom(refeicaoDto => refeicaoDto.ControleData));
+            .ForMember(refeicao => refeicao.DataObra,
+            option => option.MapFrom(refeicaoDto => refeicaoDto.DataObra));
     }
 }

@@ -9,7 +9,7 @@ public class Cafe : IConferirRefeicao
     {
         if (refeicao.Cafe != refeicaoDto.Cafe)
         {
-            DateTime dataHoraRefeicao = refeicao.ControleData.DataRefeicao.ToDateTime(horarioRefeicao);
+            DateTime dataHoraRefeicao = refeicao.DataObra.ControleData.DataRefeicao.ToDateTime(horarioRefeicao);
             TimeSpan tempo = dataHoraRefeicao - DateTime.Now;
 
             if (tempo >= diferenca)

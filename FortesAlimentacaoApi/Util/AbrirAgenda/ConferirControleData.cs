@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using FortesAlimentacaoApi.Database.Dtos.ControleData;
+using FortesAlimentacaoApi.Database.Dtos.Obra;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
+using FortesAlimentacaoApi.Util.DataObra;
 using Microsoft.EntityFrameworkCore;
 
 namespace FortesAlimentacaoApi.Util.AbrirAgenda;
@@ -25,12 +27,14 @@ public class ConferirControleData
         using (var scope = _serviceProvider.CreateScope())
         {
             var _context = scope.ServiceProvider.GetRequiredService<FortesAlimentacaoDbContext>();
+            var _todasObras = scope.ServiceProvider.GetRequiredService<TodasObras>();
+            var _obrasSelecionadas = scope.ServiceProvider.GetRequiredService<ObraSelecionada>();
 
             _logger.LogInformation("A conferência de datas foi iniciada.");
 
-            DateOnly dataDia = DateOnly.FromDateTime(DateTime.Today).AddDays(3);
+            DateOnly dataDia = DateOnly.FromDateTime(DateTime.Today).AddDays(6);
 
-            if (DateTime.Today.DayOfWeek is DayOfWeek.Thursday)
+            if (DateTime.Today.DayOfWeek is DayOfWeek.Monday)
             {
                 _logger.LogInformation("O cadastro das datas foi permitido.");
 
@@ -44,8 +48,11 @@ public class ConferirControleData
                     if (controleData is null)
                     {
                         InserirControleData data = new(dataDia, null, false);
-                        await _context.AddAsync(_mapper.Map<ControleData>(data));
+                        ControleData controle = _mapper.Map<ControleData>(data);
+                        await _context.AddAsync(controle);
                         await _context.SaveChangesAsync();
+
+                        await _todasObras.Inserir(controle.Id);
                     }
                 }
 

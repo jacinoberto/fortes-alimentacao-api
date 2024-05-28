@@ -21,4 +21,6 @@ public class DataObra
 
     public Obra Obra { get; set; }
     public ControleData ControleData { get; set; }
+
+    public ICollection<Refeicao> Refeicoes { get; set; }
 }
