@@ -32,9 +32,9 @@ public class ConferirControleData
 
             _logger.LogInformation("A conferência de datas foi iniciada.");
 
-            DateOnly dataDia = DateOnly.FromDateTime(DateTime.Today).AddDays(5);
+            DateOnly dataDia = DateOnly.FromDateTime(DateTime.Today).AddDays(3);
 
-            if (DateTime.Today.DayOfWeek is DayOfWeek.Tuesday)
+            if (DateTime.Today.DayOfWeek is DayOfWeek.Thursday)
             {
                 _logger.LogInformation("O cadastro das datas foi permitido.");
 
@@ -55,10 +55,14 @@ public class ConferirControleData
                         await _todasObras.Inserir(controle.Id);
                     }
 
-                    ICollection<ObraSelect> obrasSelect = [];
+                    HashSet<ObraSelect> obrasSelect = [];
+                    ICollection<Obra> obras = _context.Obras.ToList();
+                    ICollection<Database.Models.DataObra> data_obra = _context.DataObras
+                            .Where(data => data.ControleData.DataRefeicao == dataDia).ToList();
 
                     if (controleData is not null
-                        && controleData.Atipico is true)
+                        && controleData.Atipico is true
+                        && data_obra.Count() != obras.Count())
                     {
                         InserirControleData data = new(dataDia, null, false);
                         ControleData controle = _mapper.Map<ControleData>(data);
@@ -68,17 +72,29 @@ public class ConferirControleData
                         ICollection<Database.Models.DataObra> dataObras = _context.DataObras
                             .Where(data => data.ControleData.DataRefeicao == controle.DataRefeicao).ToList();
 
-                        ICollection<Obra> obras = _context.Obras.ToList();
                         
                         foreach (var obra in obras)
                         {
                             foreach (var dataObra in dataObras)
                             {
                                 if (dataObra.Obra.Id != obra.Id) obrasSelect.Add(new ObraSelect(obra.Id));
+                                
                             }
                         }
 
-                        await _obrasSelecionadas.Inserir(obrasSelect, controle.Id);
+                        foreach (var obraSelect in obrasSelect)
+                        {
+                            var teste = _context.DataObras.FirstOrDefault(data => data.ObraId == obraSelect.Id
+                            && data.ControleData.DataRefeicao == controle.DataRefeicao
+                            && data.ControleData.Atipico == true);
+
+                            if (teste is null)
+                            {
+                                _context.DataObras.Add(_mapper.Map<Database.Models.DataObra>(new Database.Dtos.DataObra.InserirDataObra(obraSelect.Id, controle.Id)));
+                                _context.SaveChanges();
+
+                            }
+                        }
                     }
                 }
 
