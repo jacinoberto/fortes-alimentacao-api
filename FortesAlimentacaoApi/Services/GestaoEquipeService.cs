@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FortesAlimentacaoApi.Database.Dtos.GestaoEquipe;
 using FortesAlimentacaoApi.Database.Models;
+using FortesAlimentacaoApi.Handler.Excecoes;
 using FortesAlimentacaoApi.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,11 +20,20 @@ public class GestaoEquipeService : IGlobalService<InserirGestaoEquipe, RetornarG
 
     public async Task<RetornarGestaoEquipe> Inserir(InserirGestaoEquipe entity)
     {
-        GestaoEquipe gestaoEquipe = _mapper.Map<GestaoEquipe>(entity);
-        await _context.GestaoEquipes.AddAsync(gestaoEquipe);
-        await _context.SaveChangesAsync();
+        var validacao = _context.GestaoEquipes
+            .FirstOrDefault(gestao => gestao.EncarregadoId == entity.EncarregadoId
+                && gestao.Setor == entity.Setor);
 
-        return _mapper.Map<RetornarGestaoEquipe>(gestaoEquipe);
+        if (validacao is null)
+        {
+            GestaoEquipe gestaoEquipe = _mapper.Map<GestaoEquipe>(entity);
+            await _context.GestaoEquipes.AddAsync(gestaoEquipe);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<RetornarGestaoEquipe>(gestaoEquipe);
+        }
+
+        throw new SetorNaoUnicoException("Um Encarregado não pode ter mais de uma equipe no mesmo setor.");
     }
 
     public async Task<RetornarGestaoEquipe> RetornarPorId(Guid id)

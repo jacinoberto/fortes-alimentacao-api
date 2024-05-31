@@ -19,10 +19,19 @@ public class GestaoEquipeController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Inserir([FromBody] InserirGestaoEquipe gestaoDto)
     {
-        RetornarGestaoEquipe gestao = await _service.Inserir(gestaoDto);
-        return CreatedAtAction(nameof(RetornarPorId),
-            new { id = gestao.Id },
-            gestao);
+        try
+        {
+            RetornarGestaoEquipe gestao = await _service.Inserir(gestaoDto);
+            return CreatedAtAction(nameof(RetornarPorId),
+                new { id = gestao.Id },
+                gestao);
+        }
+        catch (Exception ex)
+        {
+            var retorno = Content(ex.Message);
+            retorno.StatusCode = 500;
+            return retorno;
+        }
     }
 
     [HttpGet("{id}")]
