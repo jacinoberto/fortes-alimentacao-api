@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FortesAlimentacaoApi.Database.Models;
 
-[Table("tb_data_obra")]
+[Table("tb_data_obras")]
 public class DataObra
 {
     [Key]
