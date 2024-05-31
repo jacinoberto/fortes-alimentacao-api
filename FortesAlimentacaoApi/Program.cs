@@ -42,6 +42,7 @@ builder.Services.AddScoped<SelectService>();
 builder.Services.AddScoped<ObraSelecionada>();
 builder.Services.AddScoped<TodasObras>();
 builder.Services.AddScoped<DataObraService>();
+builder.Services.AddScoped<RelatorioService>();
 builder.Services.AddSingleton<IFiltrarDia, FiltrarDiaAtipico>();
 builder.Services.AddSingleton<IFiltrarDia, FiltrarDiaNaoAtipico>();
 builder.Services.AddSingleton<IValidarDia, ValidarDiaAtipico>();
