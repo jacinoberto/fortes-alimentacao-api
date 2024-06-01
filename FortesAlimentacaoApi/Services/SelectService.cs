@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FortesAlimentacaoApi.Database.Dtos.Encarregado;
 using FortesAlimentacaoApi.Database.Dtos.GestaoEquipe;
+using FortesAlimentacaoApi.Database.Dtos.Obra;
 using FortesAlimentacaoApi.Database.Dtos.Operario;
 using FortesAlimentacaoApi.Infra.Context;
 using Microsoft.EntityFrameworkCore;
@@ -41,5 +42,11 @@ public class SelectService
             .Where(operario => operario.Nome.ToUpper().Contains(nome.ToUpper()))
             .Where(operario => operario.Status == true)
             .ToListAsync());
+    }
+
+    public async Task<IEnumerable<ObraSelectData>> SelectObraAsync()
+    {
+        return _mapper.Map<IEnumerable<ObraSelectData>>(await _context.Obras
+            .Include(obra => obra.Endereco).ToListAsync());
     }
 }

@@ -10,5 +10,6 @@ public class EnderecoProfile : Profile
     {
         CreateMap<EnderecoDto, Endereco>();
         CreateMap<Endereco, EnderecoDto>();
+        CreateMap<Endereco, EnderecoObra>();
     }
 }

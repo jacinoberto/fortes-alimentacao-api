@@ -21,5 +21,9 @@ public class ObraProfile : Profile
         CreateMap<Obra, RetornoObraGestao>();
 
         CreateMap<Obra, RetornarObraSelect>();
+
+        CreateMap<Obra, ObraSelectData>()
+            .ForMember(obraDto => obraDto.Endereco,
+            option => option.MapFrom(obra => obra.Endereco));
     }
 }

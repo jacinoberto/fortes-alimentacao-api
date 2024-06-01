@@ -5,6 +5,7 @@ using FortesAlimentacaoApi.Database.Dtos.Encarregado;
 using Microsoft.AspNetCore.Mvc;
 using FortesAlimentacaoApi.Database.Dtos.GestaoEquipe;
 using FortesAlimentacaoApi.Database.Dtos.Operario;
+using FortesAlimentacaoApi.Database.Dtos.Obra;
 
 [Route("api/select")]
 [ApiController]
@@ -36,5 +37,12 @@ public class SelectController : ControllerBase
     {
         IEnumerable<OperarioSelect> operarios = await _service.SelectOperarioAsync(nome);
         return operarios is not null ? Ok(operarios) : NotFound();
+    }
+
+    [HttpGet("obra")]
+    public async Task<IActionResult> SelectObraAsync()
+    {
+        IEnumerable<ObraSelectData> obras = await _service.SelectObraAsync();
+        return obras is not null ? Ok(obras) : NotFound();
     }
 }
