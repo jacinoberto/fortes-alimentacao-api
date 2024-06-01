@@ -88,7 +88,7 @@ public class RelatorioService
 
         var encarregados = await EncarregadosAtivos();
 
-        string setor;
+        string setor = "";
 
         foreach (var encarregado in encarregados)
         {

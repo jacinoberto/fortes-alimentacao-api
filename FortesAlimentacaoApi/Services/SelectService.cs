@@ -19,10 +19,9 @@ public class SelectService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<EncarregadoSelect>> SelectEncarregadoAsync(string nome)
+    public async Task<IEnumerable<EncarregadoSelect>> SelectEncarregadoAsync()
     {
         return _mapper.Map<IEnumerable<EncarregadoSelect>>(await _context.Encarregados
-            .Where(encarregado => encarregado.Gestor.Nome.ToUpper().Contains(nome.ToUpper()))
             .Where(encarregado => encarregado.Gestor.Status == true)
             .ToListAsync());
     }

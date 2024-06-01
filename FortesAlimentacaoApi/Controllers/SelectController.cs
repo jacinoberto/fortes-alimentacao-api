@@ -19,9 +19,9 @@ public class SelectController : ControllerBase
     }
 
     [HttpGet("encarregado")]
-    public async Task<IActionResult> SelectEncarregadoAsync([FromQuery] string nome)
+    public async Task<IActionResult> SelectEncarregadoAsync()
     {
-        IEnumerable<EncarregadoSelect> encarregados = await _service.SelectEncarregadoAsync(nome);
+        IEnumerable<EncarregadoSelect> encarregados = await _service.SelectEncarregadoAsync();
         return encarregados is not null ? Ok(encarregados) : NotFound();
     }
 
