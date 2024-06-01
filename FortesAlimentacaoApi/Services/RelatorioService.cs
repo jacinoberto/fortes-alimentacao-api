@@ -63,7 +63,7 @@ public class RelatorioService
     public HashSet<DateOnly> RetornarDatas(DateOnly dataInicial, DateOnly dataFinal)
     {
         return _context.Refeicoes
-                .Where(refeicao => refeicao.DataObra.ControleData.DataRefeicao > dataInicial
+                .Where(refeicao => refeicao.DataObra.ControleData.DataRefeicao >= dataInicial
                 && refeicao.DataObra.ControleData.DataRefeicao <= dataFinal)
                 .Include(refeicao => refeicao.DataObra)
                 .Include(refeicao => refeicao.DataObra.ControleData)
