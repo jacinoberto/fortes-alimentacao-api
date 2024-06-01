@@ -35,4 +35,10 @@ public class ControleDataController : ControllerBase
     {
         return Ok(await _service.RetornarTodos());
     }
+
+    [HttpGet("data-atipica")]
+    public async Task<IActionResult> RetornarDatasAtipicas()
+    {
+        return Ok(await _service.RetornarDatasAtipicas());
+    }
 }

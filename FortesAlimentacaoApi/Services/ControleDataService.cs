@@ -42,4 +42,10 @@ public class ControleDataService : IGlobalService<InserirControleData, RetornarC
     {
         throw new NotImplementedException();
     }
+
+    public async Task<IEnumerable<RetornoControleDataRefeicao>> RetornarDatasAtipicas()
+    {
+        return _mapper.Map<IEnumerable<RetornoControleDataRefeicao>>(await _context.ControleDatas
+            .Where(data => data.Atipico == true).ToListAsync());
+    }
 }
