@@ -6,6 +6,7 @@ using FortesAlimentacaoApi.Infra.Context;
 using FortesAlimentacaoApi.Util.ValidarDatas;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FortesAlimentacaoApi.Services;
 
@@ -104,6 +105,8 @@ public class RelatorioService
 
         string setor = "";
 
+        int total = 0;
+
         foreach (var encarregado in encarregados)
         {
             ICollection<Relatorio> relatorios = [];
@@ -112,14 +115,20 @@ public class RelatorioService
 
             foreach (var data in datas)
             {
+                int totalCafe = TotalCafe(encarregado.Id, data).Result;
+                int totalAlmoco = TotalAlmoco(encarregado.Id, data).Result;
+                int totalJantar = TotalJantar(encarregado.Id, data).Result;
+
                 if (relatorios.Count() == 0)
                 {
                     relatorios.Add(new Relatorio(
                         data,
-                        TotalCafe(encarregado.Id, data).Result,
-                        TotalAlmoco(encarregado.Id, data).Result,
-                        TotalJantar(encarregado.Id, data).Result
+                        totalCafe,
+                        totalAlmoco,
+                        totalJantar
                         ));
+
+                    total = total + totalCafe + totalAlmoco + totalJantar;
                 }
 
                 var relatorio = relatorios.Where(relatorio => relatorio.DataRefeicao == data);
@@ -128,17 +137,20 @@ public class RelatorioService
                 {
                     relatorios.Add(new Relatorio(
                         data,
-                        TotalCafe(encarregado.Id, data).Result,
-                        TotalAlmoco(encarregado.Id, data).Result,
-                        TotalJantar(encarregado.Id, data).Result
+                        totalCafe,
+                        totalAlmoco,
+                        totalJantar
                         ));
+
+                    total = total + totalCafe + totalAlmoco + totalJantar;
                 }
             }
 
             retornoRelatorios.Add(new RetornoRelatorio(
                 encarregado.Gestor.Nome,
                 relatorios,
-                setor
+                setor,
+                total
                 ));
         }
 
@@ -154,6 +166,7 @@ public class RelatorioService
         var encarregados = await EncarregadosAtivos();
 
         string setor;
+        int total = 0;
 
         foreach (var encarregado in encarregados)
         {
@@ -162,14 +175,20 @@ public class RelatorioService
 
             foreach (var data in datas)
             {
+                int totalCafe = TotalCafe(encarregado.Id, data).Result;
+                int totalAlmoco = TotalAlmoco(encarregado.Id, data).Result;
+                int totalJantar = TotalJantar(encarregado.Id, data).Result;
+
                 if (relatorios.Count() == 0)
                 {
                     relatorios.Add(new Relatorio(
                         data,
-                        TotalCafe(encarregado.Id, data).Result,
-                        TotalAlmoco(encarregado.Id, data).Result,
-                        TotalJantar(encarregado.Id, data).Result
+                        totalCafe,
+                        totalAlmoco,
+                        totalJantar
                         ));
+
+                    total = totalCafe + totalAlmoco + totalJantar;
                 }
 
                 var relatorio = relatorios.Where(relatorio => relatorio.DataRefeicao == data);
@@ -178,17 +197,20 @@ public class RelatorioService
                 {
                     relatorios.Add(new Relatorio(
                         data,
-                        TotalCafe(encarregado.Id, data).Result,
-                        TotalAlmoco(encarregado.Id, data).Result,
-                        TotalJantar(encarregado.Id, data).Result
+                        totalCafe,
+                        totalAlmoco,
+                        totalJantar
                         ));
+
+                    total = totalCafe + totalAlmoco + totalJantar;
                 }
             }
 
             retornoRelatorios.Add(new RetornoRelatorio(
                 encarregado.Gestor.Nome,
                 relatorios,
-                setor
+                setor,
+                total
                 ));
         }
 
