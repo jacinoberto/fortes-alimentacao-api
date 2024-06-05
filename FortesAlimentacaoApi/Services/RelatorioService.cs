@@ -49,7 +49,26 @@ public class RelatorioService
 
     public async Task<IEnumerable<Encarregado>> EncarregadosAtivos()
     {
-        return await _context.Encarregados.Where(encarregado => encarregado.Gestor.Status == true).ToListAsync();
+        /*ICollection<Encarregado> encarregados = await _context.Encarregados
+            .Where(encarregado => encarregado.Gestor.Status == true).ToListAsync();
+
+        ICollection<Encarregado> encarregadosRefeicao = [];
+
+        foreach (var encarregado in encarregados)
+        {
+            encarregadosRefeicao.Add(_context.Refeicoes
+            .Where(refeicao => refeicao.Equipe.GestaoEquipe.EncarregadoId == encarregado.Id)
+            .Select(refeicao => refeicao.Equipe.GestaoEquipe.Encarregado) as Encarregado); 
+        }
+
+        return encarregadosRefeicao;*/
+
+        return _context.Encarregados.Where(encarregado => encarregado.Gestor.Status == true).ToList();
+    }
+
+    public IEnumerable<Encarregado> EncarregadosEmRefeicao()
+    {
+        return _context.Refeicoes.Select(refeicao => refeicao.Equipe.GestaoEquipe.Encarregado).ToList();
     }
 
     public HashSet<DateOnly> RetornarDatas()
@@ -101,7 +120,9 @@ public class RelatorioService
 
         HashSet<DateOnly> datas = RetornarDatas();
 
-        var encarregados = await EncarregadosAtivos();
+        //IEnumerable<Encarregado> encarregados = await EncarregadosAtivos();
+
+        ISet<Encarregado> encarregados = new HashSet<Encarregado>(EncarregadosEmRefeicao());
 
         string setor = "";
 
@@ -128,7 +149,7 @@ public class RelatorioService
                         totalJantar
                         ));
 
-                    total = total + totalCafe + totalAlmoco + totalJantar;
+                    total += totalCafe + totalAlmoco + totalJantar;
                 }
 
                 var relatorio = relatorios.Where(relatorio => relatorio.DataRefeicao == data);
@@ -142,7 +163,7 @@ public class RelatorioService
                         totalJantar
                         ));
 
-                    total = total + totalCafe + totalAlmoco + totalJantar;
+                    total += totalCafe + totalAlmoco + totalJantar;
                 }
             }
 
@@ -188,7 +209,7 @@ public class RelatorioService
                         totalJantar
                         ));
 
-                    total = totalCafe + totalAlmoco + totalJantar;
+                    total += totalCafe + totalAlmoco + totalJantar;
                 }
 
                 var relatorio = relatorios.Where(relatorio => relatorio.DataRefeicao == data);
@@ -202,7 +223,7 @@ public class RelatorioService
                         totalJantar
                         ));
 
-                    total = totalCafe + totalAlmoco + totalJantar;
+                    total += totalCafe + totalAlmoco + totalJantar;
                 }
             }
 
