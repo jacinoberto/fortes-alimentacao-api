@@ -5,6 +5,8 @@ using FortesAlimentacaoApi.Util.DataObra;
 using FortesAlimentacaoApi.Util.Filtro;
 using FortesAlimentacaoApi.Util.Validacao;
 using FortesAlimentacaoApi.Util.Validacao.ConferirRefeicao;
+using FortesAlimentacaoApi.Util.ValidarDatas;
+using FortesAlimentacaoApi.Util.VerificarDias.Dias;
 using FortesAlimentacaoApi.Util.WorkSevice;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,6 +59,13 @@ builder.Services.AddSingleton<AberturaAgenda>();
 builder.Services.AddSingleton<ConferirControleData>();
 builder.Services.AddSingleton<RegistrarMonitoramento>();
 builder.Services.AddSingleton<FinalizarMonitoramento>();
+builder.Services.AddSingleton<IDiaSemanaStrategy, Segunda>();
+builder.Services.AddSingleton<IDiaSemanaStrategy, Terca>();
+builder.Services.AddSingleton<IDiaSemanaStrategy, Quarta>();
+builder.Services.AddSingleton<IDiaSemanaStrategy, Quinta>();
+builder.Services.AddSingleton<IDiaSemanaStrategy, Sexta>();
+builder.Services.AddSingleton<IDiaSemanaStrategy, Sabado>();
+builder.Services.AddSingleton<IDiaSemanaStrategy, Domingo>();
 
 builder.Services.AddControllers();
 

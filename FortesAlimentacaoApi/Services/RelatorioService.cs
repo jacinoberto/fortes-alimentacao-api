@@ -3,6 +3,7 @@ using FortesAlimentacaoApi.Database.Dtos.Encarregado;
 using FortesAlimentacaoApi.Database.Dtos.Relatorio;
 using FortesAlimentacaoApi.Database.Models;
 using FortesAlimentacaoApi.Infra.Context;
+using FortesAlimentacaoApi.Util.ValidarDatas;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -12,11 +13,13 @@ public class RelatorioService
 {
     private readonly FortesAlimentacaoDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IEnumerable<IDiaSemanaStrategy> _diasSemana;
 
-    public RelatorioService(FortesAlimentacaoDbContext conteext, IMapper mapper)
+    public RelatorioService(FortesAlimentacaoDbContext conteext, IMapper mapper, IEnumerable<IDiaSemanaStrategy> diasSemana)
     {
         _context = conteext;
         _mapper = mapper;
+        _diasSemana = diasSemana;
     }
 
     public async Task<int> TotalCafe(Guid idEncarregado, DateOnly data)
@@ -50,9 +53,20 @@ public class RelatorioService
 
     public HashSet<DateOnly> RetornarDatas()
     {
+        DateOnly dataHoje = DateOnly.FromDateTime(DateTime.Today);
+        DiaSemana diaHoje = null;
+
+        foreach (var dia in _diasSemana)
+        {
+            if (dia.Verificar(dataHoje) is not null)
+            {
+                diaHoje = dia.Verificar(dataHoje);
+            }
+        }
+
         return _context.Refeicoes
-                .Where(refeicao => refeicao.DataObra.ControleData.DataRefeicao > DateOnly.FromDateTime(DateTime.Today)
-                && refeicao.DataObra.ControleData.DataRefeicao < refeicao.DataObra.ControleData.DataRefeicao.AddDays(7))
+                .Where(refeicao => refeicao.DataObra.ControleData.DataRefeicao >= diaHoje.DataInicial
+                && refeicao.DataObra.ControleData.DataRefeicao <= diaHoje.DataFinal)
                 .Include(refeicao => refeicao.DataObra)
                 .Include(refeicao => refeicao.DataObra.ControleData)
                 .Select(refeicao => refeicao.DataObra.ControleData.DataRefeicao)
